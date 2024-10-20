@@ -9,9 +9,9 @@
 #include <QSqlError>
 #include <QStandardPaths>
 
-LeagueDataStore::LeagueDataStore(QObject* parent, const QString& data_directory)
+LeagueDataStore::LeagueDataStore(const QString& directory, QObject* parent)
     : QObject(parent)
-    , m_data_directory(data_directory) {}
+    , m_data_directory(directory) {}
 
 void LeagueDataStore::setUsername(const QString& username)
 {

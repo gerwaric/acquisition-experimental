@@ -19,105 +19,57 @@
 
 //#include <main.h>
 
-#include <acquisition/acquisition.h>
-#include <acquisition/constants.h>
-#include <acquisition/data_stores/league_data_store.h>
-#include <acquisition/data_model/tree_model.h>
-#include <acquisition/utils/utils.h>
-#include <acquisition/api_types/character.h>
-#include <acquisition/api_types/stash_tab.h>
+#include <acquisition.h>
+#include <acquisition/command_line.h>
 
 #include <QsLog/QsLog.h>
 
-#include <QCommandLineOption>
-#include <QCommandLineParser>
-#include <QDir>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include <QQmlContext>
-#include <QStandardPaths>
-
-#include <QByteArray>
 #include <QString>
-#include <QDesktopServices>
-#include <QOAuth2AuthorizationCodeFlow>
-#include <QOAuthUriSchemeReplyHandler>
-#include <QOAuthHttpServerReplyHandler>
-#include <QCryptographicHash>
-#include <QUuid>
-#include <QUrl>
-#include <QAbstractOAuth>
-#include <QUrlQuery>
-#include <QMultiMap>
-
-#ifdef _DEBUG
-constexpr QsLogging::Level DefaultLogging = QsLogging::DebugLevel;
-#else
-constexpr QsLogging::Level DefaultLogging = QsLogging::InfoLevel;
-#endif
-
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QObject>
-#include <QQmlEngine>
 
 int main(int argc, char* argv[])
 {
     QGuiApplication app(argc, argv);
 
-    QCommandLineOption data_directory_option(
-        { "d", "data-directory" },
-        "Location for data files",
-        "data_directory",
-        QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation));
+    // Process the command line options.
+    CommandLine command_line(app);
+    const QsLogging::Level logging_level = command_line.logging_level();
+    const QString data_directory = command_line.data_directory();
 
-    QCommandLineOption logging_level_option(
-        { "l", "logging-level" },
-        "off, fatal, error, warn, info, debug, trace",
-        "logging_level",
-        utils::logLevelName(DefaultLogging));
-
-    QCommandLineParser p;
-    p.setApplicationDescription("Inventory and forum shop management for Path of Exile");
-    p.addHelpOption();
-    p.addVersionOption();
-    p.addOption(data_directory_option);
-    p.addOption(logging_level_option);
-    p.process(app);
-
-    const QsLogging::Level logging_level = utils::logLevel(p.value(logging_level_option));
-    const QString data_directory = p.value(data_directory_option);
-    const QString log_filename = Application::makeLogFilename(data_directory);
-
+    // Setup logging before creating the QML engine so that we can configure
+    // use the data directory for log messages now. Otherwise we'd have to wait
+    // until after the Acquisition singleton instance is constructed to set
+    // the data directory. This would leave us unable to log anything during
+    // the construction of that object.
+    const QString logging_filename = Acquisition::makeLogFilename(data_directory);
     QsLogging::Logger& logger = QsLogging::Logger::instance();
     logger.setLoggingLevel(logging_level);
     logger.addDestination(QsLogging::DestinationFactory::MakeDebugOutputDestination());
-    logger.addDestination(QsLogging::DestinationFactory::MakeFileDestination(log_filename,
+    logger.addDestination(QsLogging::DestinationFactory::MakeFileDestination(logging_filename,
         QsLogging::EnableLogRotation,
         QsLogging::MaxSizeBytes(10 * 1024 * 1024),
         QsLogging::MaxOldLogCount(0)));
 
-    const QString banner_text("- Starting " APP_NAME " version " APP_VERSION_STRING " -");
-    const QString banner_line(banner_text.length(), '-');
-
-    QLOG_INFO() << banner_line;
-    QLOG_INFO() << banner_text;
-    QLOG_INFO() << banner_line;
-
-    QLOG_DEBUG() << "Creating application";
-    Application acquisition(data_directory);
-
-    QLOG_DEBUG() << "Creating QML engine";
+    // Create the QML application engine, which will create its own instance
+    // of the Acquisition object for us to use.
     QQmlApplicationEngine engine;
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed, &app,
         [](const QUrl& url) {
-            QLOG_FATAL() << "QML error loading" << url.toString();
+            QLOG_FATAL() << "QML object creation failed:" << url.toString();
             QCoreApplication::exit(-1);
-        },
-        Qt::QueuedConnection);
+        }, Qt::QueuedConnection);
 
-    QLOG_DEBUG() << "Setting root context";
-    engine.rootContext()->setContextProperty("Acquisition", &acquisition);
+    // Get the Acquisition object so we can set the data directory.
+    Acquisition* acquisition = engine.singletonInstance<Acquisition*>("MyAcquisition", "Acquisition");
+    if (!acquisition) {
+        QLOG_FATAL() << "Unable to retrieve the Acquisition instance";
+        exit(EXIT_FAILURE);
+    };
+
+    // Set the data directory before loading the engine module so that
+    // Acquisition can properly setup all the stuff needed by QML.
+    acquisition->init(data_directory);
 
     QLOG_DEBUG() << "Loading QML module";
     engine.loadFromModule("MyAcquisition", "Main");

@@ -44,8 +44,8 @@ class RateLimiter : public QObject {
 public:
     // Create a rate limiter.
     explicit RateLimiter(
-        QObject* parent,
-        QNetworkAccessManager& network_manager);
+        QNetworkAccessManager& network_manager,
+        QObject* parent);
 
     // Submit a request-callback pair to the rate limiter. The caller is responsible
     // for freeing the RateLimitedReply object with deleteLater() when the completed()

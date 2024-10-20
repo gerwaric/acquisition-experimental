@@ -6,19 +6,19 @@ namespace utils {
     {
         // Qt 6.5.3 does not properly parse the non-numeric time-zones that are 
         // declated as obsolete but still allowed in RFC2822.
-        constexpr std::array<std::pair<const char*, const char*>, 10> OBSOLETE_TIMEZONES = { {
-            {"GMT", "+0000"},
-            {"UT" , "+0000"},
-            {"EST", "-0005"},
-            {"EDT", "-0004"},
-            {"CST", "-0006"},
-            {"CDT", "-0005"},
-            {"MST", "-0007"},
-            {"MDT", "-0006"},
-            {"PST", "-0008"},
-            {"PDT", "-0007"}} };
+        constexpr std::array obsolete_timezones = {
+            std::make_pair("GMT", "+0000"),
+            std::make_pair("UT" , "+0000"),
+            std::make_pair("EST", "-0005"),
+            std::make_pair("EDT", "-0004"),
+            std::make_pair("CST", "-0006"),
+            std::make_pair("CDT", "-0005"),
+            std::make_pair("MST", "-0007"),
+            std::make_pair("MDT", "-0006"),
+            std::make_pair("PST", "-0008"),
+            std::make_pair("PDT", "-0007") };
         QByteArray fixed = date.trimmed();
-        for (const auto& pair : OBSOLETE_TIMEZONES) {
+        for (const auto& pair : obsolete_timezones) {
             const char* zone = pair.first;
             const char* offset = pair.second;
             if (fixed.endsWith(zone)) {
@@ -45,34 +45,27 @@ namespace utils {
         return parseRFC2822(QByteArray::fromStdString(date));
     }
 
-    QsLogging::Level logLevel(const QString& value)
+    QsLogging::Level loggingLevel(const QString& value)
     {
-        if (0 == value.compare("TRACE", Qt::CaseInsensitive)) return QsLogging::TraceLevel;
-        if (0 == value.compare("DEBUG", Qt::CaseInsensitive)) return QsLogging::DebugLevel;
-        if (0 == value.compare("INFO", Qt::CaseInsensitive)) return QsLogging::InfoLevel;
-        if (0 == value.compare("WARN", Qt::CaseInsensitive)) return QsLogging::WarnLevel;
-        if (0 == value.compare("ERROR", Qt::CaseInsensitive)) return QsLogging::ErrorLevel;
-        if (0 == value.compare("FATAL", Qt::CaseInsensitive)) return QsLogging::FatalLevel;
-        if (0 == value.compare("OFF", Qt::CaseInsensitive)) return QsLogging::OffLevel;
-        QLOG_ERROR() << "Invalid logging level:" << value;
+        const QString v = value.toUpper();
+        for (const auto& pair : logging_level_names) {
+            if (0 == v.compare(pair.second, Qt::CaseInsensitive)) {
+                return pair.first;
+            };
+        };
+        QLOG_ERROR() << "Utils: invalid logging level:" << value;
         return QsLogging::InfoLevel;
     }
 
-    QString logLevelName(QsLogging::Level level)
+    QString loggingLevelName(QsLogging::Level level)
     {
-        switch (level) {
-        case QsLogging::TraceLevel: return "TRACE"; break;
-        case QsLogging::DebugLevel: return "DEBUG"; break;
-        case QsLogging::InfoLevel: return "INFO"; break;
-        case QsLogging::WarnLevel: return "WARN"; break;
-        case QsLogging::ErrorLevel: return "ERROR"; break;
-        case QsLogging::FatalLevel: return "FATAL"; break;
-        case QsLogging::OffLevel: return "OFF"; break;
-        default:
-            QLOG_ERROR() << "Invalid logging level:" << level;
-            return "";
+        for (const auto& pair : logging_level_names) {
+            if (level == pair.first) {
+                return pair.second;
+            };
         };
-
+        QLOG_ERROR() << "Utils: invalid logging level:" << level;
+        return "<INVALID>";
     }
 
     QString leaguePrettyName(const QString& league_id)

@@ -4,11 +4,9 @@ target_include_directories(acquisition PRIVATE
 
 # Acquisition
 target_sources(acquisition PRIVATE
-    "acquisition/acquisition.cpp"
-    "acquisition/acquisition.h"
+    "acquisition/command_line.cpp"
+    "acquisition/command_line.h"
     "acquisition/constants.h"
-    #"acquisition/endpoint_manager.cpp"
-    #"acquisition/endpoint_manager.h"
     "acquisition/main.cpp"
     "acquisition/settings.cpp"
     "acquisition/settings.h"

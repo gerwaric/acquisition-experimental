@@ -16,7 +16,7 @@
 class LeagueDataStore : public QObject {
     Q_OBJECT
 public:
-    LeagueDataStore(QObject *parent, const QString& data_directory);
+    LeagueDataStore(const QString& directory, QObject *parent);
 
     QStringList getCharacterList();
     QStringList getStashList();

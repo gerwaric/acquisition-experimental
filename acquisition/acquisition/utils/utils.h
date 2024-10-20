@@ -11,6 +11,16 @@
 
 namespace utils {
 
+    constexpr std::array logging_level_names = {
+        std::make_pair(QsLogging::TraceLevel, "Trace"),
+        std::make_pair(QsLogging::DebugLevel, "Debug"),
+        std::make_pair(QsLogging::InfoLevel,  "Info"),
+        std::make_pair(QsLogging::WarnLevel,  "Warn"),
+        std::make_pair(QsLogging::ErrorLevel, "Error"),
+        std::make_pair(QsLogging::FatalLevel, "Fatal"),
+        std::make_pair(QsLogging::OffLevel,   "Off")
+    };
+
     inline bool ends_with(std::string_view str, std::string_view suffix)
     {
         return (str.size() >= suffix.size())
@@ -31,9 +41,9 @@ namespace utils {
 
     QDateTime parseRFC2822(const std::string& rfc2822_date);
 
-    QsLogging::Level logLevel(const QString& value);
+    QsLogging::Level loggingLevel(const QString& value);
 
-    QString logLevelName(QsLogging::Level level);
+    QString loggingLevelName(QsLogging::Level level);
 
     template<typename QEnum>
     QString QtEnumToString(const QEnum value)

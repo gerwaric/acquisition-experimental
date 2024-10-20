@@ -38,9 +38,9 @@ class OAuthManager : public QObject {
     Q_OBJECT
 public:
     explicit OAuthManager(
-        QObject* parent,
         QNetworkAccessManager& network_manager,
-        const OAuthSettings& settings);
+        const OAuthSettings& settings,
+        QObject* parent);
     void addAuthorization(QNetworkRequest& request) const;
 public slots:
     void setToken(const OAuthToken& token);

@@ -15,7 +15,7 @@
 class UserDataStore : public QObject {
     Q_OBJECT
 public:
-    UserDataStore(QObject* parent, const QString& data_directory);
+    UserDataStore(const QString& directory,  QObject* parent);
 
     void setInt(const QString& name, int value);
     int getInt(const QString& name);
@@ -34,7 +34,7 @@ public:
     {
         const QString json_string = QString::fromStdString(JS::serializeStruct(value));
         setValue(name, json_string);
-    }
+    };
 
     template<typename T>
     T getStruct(const QString& name)

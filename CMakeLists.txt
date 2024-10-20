@@ -29,8 +29,18 @@ set_target_properties(acquisition PROPERTIES
 qt_add_qml_module(acquisition
     URI MyAcquisition
     VERSION 1.0
+    SOURCES
+        acquisition.cpp
+        acquisition.h
+        filter.cpp
+        filter.h
     QML_FILES
-        Main.qml
+        acquisition/acquisition/qml/ActionListMenu.qml
+        acquisition/acquisition/qml/CollapsiblePanel.qml
+        acquisition/acquisition/qml/EquipableSearchFilters.qml
+        acquisition/acquisition/qml/Main.qml
+        acquisition/acquisition/qml/MinMaxFilter.qml
+        acquisition/acquisition/qml/SearchFilterGroup.qml
 )
 
 add_subdirectory(acquisition)

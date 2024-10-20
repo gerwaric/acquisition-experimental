@@ -5,9 +5,9 @@
 #include <QSqlError>
 #include <QStandardPaths>
 
-UserDataStore::UserDataStore(QObject* parent, const QString& data_directory)
+UserDataStore::UserDataStore(const QString& directory, QObject* parent)
     : QObject(parent)
-    , m_data_directory(data_directory) {}
+    , m_data_directory(directory) {}
 
 void UserDataStore::setUsername(const QString& username)
 {

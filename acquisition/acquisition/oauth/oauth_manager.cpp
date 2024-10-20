@@ -43,9 +43,9 @@
 constexpr int EXPIRATION_BUFFER_SECS = 3600;
 
 OAuthManager::OAuthManager(
-    QObject* parent,
     QNetworkAccessManager& network_manager,
-    const OAuthSettings& settings)
+    const OAuthSettings& settings,
+    QObject* parent)
     : QObject(parent)
     , m_network_manager(network_manager)
     , m_settings(settings)

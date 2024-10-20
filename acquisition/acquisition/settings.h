@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 
 #include <QsLog/QsLog.h>
 
@@ -9,27 +9,25 @@ class QSettings;
 class Settings : public QObject {
     Q_OBJECT
 public:
-    Settings(QObject* parent, const QString& directory);
+    Settings(const QString& directory, QObject* parent);
 
     QString filename() const { return m_filename; };
     QString username() const;
     QString league() const;
     QString sessionId() const;
-    QsLogging::Level logLevel() const;
-
-    void sendSignals();
+    QsLogging::Level loggingLevel() const;
 
 signals:
     void usernameChanged(const QString& username);
     void leagueChanged(const QString& league);
     void sessionIdChanged(const QString& session_id);
-    void logLevelChanged(QsLogging::Level level);
+    void loggingLevelChanged(QsLogging::Level level);
 
 public slots:
     void setUsername(const QString& username);
     void setLeague(const QString& league);
     void setSessionId(const QString& session_id);
-    void setLogLevel(QsLogging::Level level);
+    void setLoggingLevel(QsLogging::Level level);
 
 private:
     static QString makeFilename(const QString& directory);

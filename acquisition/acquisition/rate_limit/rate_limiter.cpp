@@ -68,8 +68,9 @@ constexpr std::array ATTRIBUTES = {
     std::make_pair(QNetworkRequest::UserMax, "UserMax"), //	32767
 };
 
-RateLimiter::RateLimiter(QObject* parent,
-    QNetworkAccessManager& network_manager)
+RateLimiter::RateLimiter(
+    QNetworkAccessManager& network_manager,
+    QObject* parent)
     : QObject(parent)
     , network_manager_(network_manager)
 {
