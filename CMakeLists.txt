@@ -10,13 +10,12 @@ project(acquisition
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6.8 REQUIRED COMPONENTS Quick)
-find_package(Qt6 REQUIRED COMPONENTS Quick HttpServer Network NetworkAuth Sql)
-
 if(MSVC)
     add_compile_options(/EHsc)
     add_compile_options(/W4)
 endif()
+
+find_package(Qt6 REQUIRED COMPONENTS HttpServer Network NetworkAuth Sql Widgets)
 
 qt_standard_project_setup(REQUIRES 6.8)
 
@@ -26,22 +25,37 @@ set_target_properties(acquisition PROPERTIES
     QT_QMLCACHEGEN_ARGUMENTS "--verbose"
 )
 
+#[[
 qt_add_qml_module(acquisition
     URI MyAcquisition
     VERSION 1.0
     SOURCES
+        # Sources have to be on the include path for QML_ELEMENT and QML_SINGLETON
         acquisition.cpp
         acquisition.h
         filter.cpp
         filter.h
     QML_FILES
         acquisition/acquisition/qml/ActionListMenu.qml
-        acquisition/acquisition/qml/CollapsiblePanel.qml
-        acquisition/acquisition/qml/EquipableSearchFilters.qml
+        acquisition/acquisition/qml/AutoComplete.qml
+
+        acquisition/acquisition/qml/FilterSectionHeader.qml
+
         acquisition/acquisition/qml/Main.qml
-        acquisition/acquisition/qml/MinMaxFilter.qml
+        acquisition/acquisition/qml/MainMenuBar.qml
         acquisition/acquisition/qml/SearchFilterGroup.qml
+        acquisition/acquisition/qml/HeistFilters.qml
+        acquisition/acquisition/qml/SanctumFilters.qml
+        acquisition/acquisition/qml/UltimatumFilters.qml
+        acquisition/acquisition/qml/MiscellaneousFilters.qml
+        acquisition/acquisition/qml/MapFilters.qml
+        acquisition/acquisition/qml/RequirementFilters.qml
+        acquisition/acquisition/qml/SocketFilters.qml
+        acquisition/acquisition/qml/ArmourFilters.qml
+        acquisition/acquisition/qml/WeaponFilters.qml
+        acquisition/acquisition/qml/TypeFilters.qml
 )
+#]]
 
 add_subdirectory(acquisition)
 add_subdirectory(external/boost-headers-only)
@@ -49,11 +63,11 @@ add_subdirectory(external/json_struct)
 add_subdirectory(external/QsLog)
 
 target_link_libraries(acquisition PRIVATE
-    Qt6::Quick
     Qt6::HttpServer
     Qt6::Network
     Qt6::NetworkAuth
     Qt6::Sql
+    Qt6::Widgets
     boost-headers-only
     json_struct
     QsLog

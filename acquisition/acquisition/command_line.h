@@ -9,7 +9,7 @@ class QCoreApplication;
 #ifdef _DEBUG
 constexpr QsLogging::Level DEFAULT_LOGGING_LEVEL = QsLogging::DebugLevel;
 #else
-constexpr QsLogging::Level DefaultLogging = QsLogging::InfoLevel;
+constexpr QsLogging::Level DEFAULT_LOGGING_LEVEL = QsLogging::InfoLevel;
 #endif
 
 class CommandLine {

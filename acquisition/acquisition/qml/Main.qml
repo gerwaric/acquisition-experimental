@@ -9,56 +9,7 @@ ApplicationWindow {
     visible: true
     title: "Acquisition"
 
-    menuBar: MenuBar {
-        id: mainWindowMenuBar
-
-        Menu {
-            id: authMenu
-            title: "Login"
-            Action {
-                text: "Authenticate with OAuth"
-                onTriggered: Acquisition.authenticate()
-            }
-        }
-
-        Menu {
-            id: leagueMenu
-            title: "League"
-            ActionListMenu {
-                title: "Current League"
-                actions: Acquisition.leagueActions
-            }
-            Action {
-                text: "Refresh League List"
-                onTriggered: Acquisition.getLeagues()
-            }
-        }
-
-        ActionListMenu {
-            id: refreshMenu
-            title: "Refresh"
-            actions: Acquisition.refreshActions
-        }
-
-        Menu {
-            id: loggingMenu
-            title: "Logging"
-            ActionListMenu {
-                title: "Level"
-                actions: Acquisition.loggingActions
-            }
-            MenuSeparator {}
-            Action {
-                text: "Reset to default"
-                onTriggered: Acquisition.restoreDefaultLogLevel()
-            }
-
-            Action {
-                text: "Open log file";
-                onTriggered: Acquisition.openLogFile()
-            }
-        }
-    }
+    menuBar: MainMenuBar {}
 
     SplitView {
         id: splitView
@@ -66,7 +17,36 @@ ApplicationWindow {
         anchors.margins: 0
         orientation: Qt.Horizontal
 
-        EquipableSearchFilters {}
+        ScrollView {
+            id: searchFilterPanel
+            anchors.margins: 0
+            SplitView.minimumWidth: implicitWidth
+            SplitView.maximumWidth: implicitWidth
+
+            ColumnLayout {
+                anchors.fill: parent
+                anchors.margins: 0
+
+                ComboBox {
+                    Layout.fillWidth: true
+                    model: ["Search Items"]
+                }
+
+                TypeFilters {}
+                WeaponFilters {}
+                ArmourFilters {}
+                SocketFilters {}
+                RequirementFilters {}
+                MapFilters {}
+                HeistFilters {}
+                SanctumFilters {}
+                UltimatumFilters {}
+                MiscellaneousFilters {}
+
+                Rectangle { Layout.fillHeight: true }
+            }
+
+        }
 
         ColumnLayout {
             id: resultsPanel

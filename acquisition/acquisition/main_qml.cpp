@@ -25,6 +25,7 @@
 #include <QsLog/QsLog.h>
 
 #include <QGuiApplication>
+#include <QQmlApplicationEngine>
 #include <QString>
 
 int main(int argc, char* argv[])
@@ -50,13 +51,28 @@ int main(int argc, char* argv[])
         QsLogging::MaxSizeBytes(10 * 1024 * 1024),
         QsLogging::MaxOldLogCount(0)));
 
-    // This is where we'd load the QML engine
+    // Create the QML application engine, which will create its own instance
+    // of the Acquisition object for us to use.
+    QQmlApplicationEngine engine;
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed, &app,
+        [](const QUrl& url) {
+            QLOG_FATAL() << "QML object creation failed:" << url.toString();
+            QCoreApplication::exit(-1);
+        }, Qt::QueuedConnection);
 
-    Acquisition* acquisition = new Acquisition(qApp);
+    // Get the Acquisition object so we can set the data directory.
+    Acquisition* acquisition = engine.singletonInstance<Acquisition*>("MyAcquisition", "Acquisition");
+    if (!acquisition) {
+        QLOG_FATAL() << "Unable to retrieve the Acquisition instance";
+        exit(EXIT_FAILURE);
+    };
 
     // Set the data directory before loading the engine module so that
     // Acquisition can properly setup all the stuff needed by QML.
     acquisition->init(data_directory);
+
+    QLOG_DEBUG() << "Loading QML module";
+    engine.loadFromModule("MyAcquisition", "Main");
 
     QLOG_DEBUG() << "Running application";
     return app.exec();

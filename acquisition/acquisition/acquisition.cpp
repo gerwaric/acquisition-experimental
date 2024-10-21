@@ -1,4 +1,4 @@
-#include <acquisition.h>
+#include <acquisition/acquisition.h>
 
 #include <acquisition/api_types/character.h>
 #include <acquisition/api_types/league.h>

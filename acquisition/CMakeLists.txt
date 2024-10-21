@@ -4,70 +4,16 @@ target_include_directories(acquisition PRIVATE
 
 # Acquisition
 target_sources(acquisition PRIVATE
+    "acquisition/acquisition.cpp"
+    "acquisition/acquisition.h"
     "acquisition/command_line.cpp"
     "acquisition/command_line.h"
     "acquisition/constants.h"
+    "acquisition/filters.cpp"
+    "acquisition/filters.h"
     "acquisition/main.cpp"
     "acquisition/settings.cpp"
     "acquisition/settings.h"
-)
-
-target_sources(acquisition PRIVATE
-    "acquisition/data_model/character_node.cpp"
-    "acquisition/data_model/character_node.h"
-    "acquisition/data_model/item_node.cpp"
-    "acquisition/data_model/item_node.h"
-    "acquisition/data_model/stash_node.cpp"
-    "acquisition/data_model/stash_node.h"
-    "acquisition/data_model/tree_model.cpp"
-    "acquisition/data_model/tree_model.h"
-    "acquisition/data_model/tree_node.cpp"
-    "acquisition/data_model/tree_node.h"
-)
-
-# Databases
-target_sources(acquisition PRIVATE
-    #"acquisition/data_stores/data_store.cpp"
-    #"acquisition/data_stores/data_store.h"
-    "acquisition/data_stores/league_data_store.cpp"
-    "acquisition/data_stores/league_data_store.h"
-    "acquisition/data_stores/user_data_store.h"
-    "acquisition/data_stores/user_data_store.cpp"
-)
-
-# Utils
-target_sources(acquisition PRIVATE
-    "acquisition/utils/fatal_error.cpp"
-    "acquisition/utils/fatal_error.h"
-    "acquisition/utils/json.h"
-    #"acquisition/utils/oauth2.cpp"
-    #"acquisition/utils/oauth2.h"
-    "acquisition/utils/utils.cpp"
-    "acquisition/utils/utils.h"
-)
-
-# OAuth authentication
-target_sources(acquisition PRIVATE
-    "acquisition/oauth/oauth_manager.cpp"
-    "acquisition/oauth/oauth_manager.h"
-    "acquisition/oauth/oauth_token.cpp"
-    "acquisition/oauth/oauth_token.h"
-)
-
-# API rate limiting
-target_sources(acquisition PRIVATE
-    "acquisition/rate_limit/rate_limited_reply.cpp"
-    "acquisition/rate_limit/rate_limited_reply.h"
-    "acquisition/rate_limit/rate_limited_request.cpp"
-    "acquisition/rate_limit/rate_limited_request.h"
-    "acquisition/rate_limit/rate_limiter.cpp"
-    "acquisition/rate_limit/rate_limiter.h"
-    "acquisition/rate_limit/rate_limit_manager.cpp"
-    "acquisition/rate_limit/rate_limit_manager.h"
-    "acquisition/rate_limit/rate_limit_policy.cpp"
-    "acquisition/rate_limit/rate_limit_policy.h"
-    #"acquisition/rate_limit/rate_limit_status_dialog.cpp"
-    #"acquisition/rate_limit/rate_limit_status_dialog.h"
 )
 
 # API data structures
@@ -97,4 +43,68 @@ target_sources(acquisition PRIVATE
     "acquisition/api_types/pvp_ladder_team_member.h"
     "acquisition/api_types/pvp_match.h"
     "acquisition/api_types/stash_tab.h"
+)
+
+target_sources(acquisition PRIVATE
+    "acquisition/data_model/character_node.cpp"
+    "acquisition/data_model/character_node.h"
+    "acquisition/data_model/item_node.cpp"
+    "acquisition/data_model/item_node.h"
+    "acquisition/data_model/stash_node.cpp"
+    "acquisition/data_model/stash_node.h"
+    "acquisition/data_model/tree_model.cpp"
+    "acquisition/data_model/tree_model.h"
+    "acquisition/data_model/tree_node.cpp"
+    "acquisition/data_model/tree_node.h"
+)
+
+# Databases
+target_sources(acquisition PRIVATE
+    #"acquisition/data_stores/data_store.cpp"
+    #"acquisition/data_stores/data_store.h"
+    "acquisition/data_stores/league_data_store.cpp"
+    "acquisition/data_stores/league_data_store.h"
+    "acquisition/data_stores/user_data_store.h"
+    "acquisition/data_stores/user_data_store.cpp"
+)
+
+# OAuth authentication
+target_sources(acquisition PRIVATE
+    "acquisition/oauth/oauth_manager.cpp"
+    "acquisition/oauth/oauth_manager.h"
+    "acquisition/oauth/oauth_token.cpp"
+    "acquisition/oauth/oauth_token.h"
+)
+
+# API rate limiting
+target_sources(acquisition PRIVATE
+    "acquisition/rate_limit/rate_limited_reply.cpp"
+    "acquisition/rate_limit/rate_limited_reply.h"
+    "acquisition/rate_limit/rate_limited_request.cpp"
+    "acquisition/rate_limit/rate_limited_request.h"
+    "acquisition/rate_limit/rate_limiter.cpp"
+    "acquisition/rate_limit/rate_limiter.h"
+    "acquisition/rate_limit/rate_limit_manager.cpp"
+    "acquisition/rate_limit/rate_limit_manager.h"
+    "acquisition/rate_limit/rate_limit_policy.cpp"
+    "acquisition/rate_limit/rate_limit_policy.h"
+    #"acquisition/rate_limit/rate_limit_status_dialog.cpp"
+    #"acquisition/rate_limit/rate_limit_status_dialog.h"
+)
+
+# Utils
+target_sources(acquisition PRIVATE
+    "acquisition/utils/fatal_error.cpp"
+    "acquisition/utils/fatal_error.h"
+    "acquisition/utils/json.h"
+    #"acquisition/utils/oauth2.cpp"
+    #"acquisition/utils/oauth2.h"
+    "acquisition/utils/utils.cpp"
+    "acquisition/utils/utils.h"
+)
+
+# User interface
+target_sources(acquisition PRIVATE
+    "acquisition/widgets/main_window.cpp"
+    "acquisition/widgets/main_window.h"
 )
