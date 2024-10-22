@@ -21,11 +21,19 @@
 
 #include <acquisition/acquisition.h>
 #include <acquisition/command_line.h>
+//#include <acquisition/widgets/main_window.h>
 
 #include <QsLog/QsLog.h>
 
+//#include <QApplication>
 #include <QGuiApplication>
+#include <QQmlApplicationEngine>
 #include <QString>
+
+//#include <acquisition/constants.h>
+//#include <QOAuth2AuthorizationCodeFlow>
+//#include <QOAuthHttpServerReplyHandler>
+//#include <QDesktopServices>
 
 int main(int argc, char* argv[])
 {
@@ -43,81 +51,93 @@ int main(int argc, char* argv[])
     // the construction of that object.
     const QString logging_filename = Acquisition::makeLogFilename(data_directory);
     QsLogging::Logger& logger = QsLogging::Logger::instance();
-    logger.setLoggingLevel(logging_level);
+    logger.setLoggingLevel(QsLogging::TraceLevel);
     logger.addDestination(QsLogging::DestinationFactory::MakeDebugOutputDestination());
     logger.addDestination(QsLogging::DestinationFactory::MakeFileDestination(logging_filename,
         QsLogging::EnableLogRotation,
         QsLogging::MaxSizeBytes(10 * 1024 * 1024),
         QsLogging::MaxOldLogCount(0)));
 
-    // This is where we'd load the QML engine
+    // This is where we would load the QML engine and acquisition singleton
+    QQmlApplicationEngine engine;
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed, &app,
+        [](const QUrl& url) {
+            QLOG_FATAL() << "QML object creation failed:" << url.toString();
+            QCoreApplication::exit(-1);
+        },
+        Qt::QueuedConnection);
 
-    Acquisition* acquisition = new Acquisition(qApp);
-
-    // Set the data directory before loading the engine module so that
-    // Acquisition can properly setup all the stuff needed by QML.
+    // Get the Acquisition object so we can set the data directory.
+    Acquisition* acquisition = engine.singletonInstance<Acquisition*>("MyAcquisition", "Acquisition");
+    if (!acquisition) {
+        QLOG_FATAL() << "Unable to retrieve the Acquisition instance";
+        exit(EXIT_FAILURE);
+    };
     acquisition->init(data_directory);
 
-    QLOG_DEBUG() << "Running application";
+    //QLOG_DEBUG() << "Creating Acquisition instance";
+    //Acquisition acquisition;
+    //acquisition.init(data_directory);
+    //QLOG_DEBUG() << "Creating MainWindow instance";
+    //MainWindow main_window(acquisition);
+    //main_window.show();
+   
+    QLOG_DEBUG() << "Running Application";
     return app.exec();
 
     /*
     QLOG_INFO() << "setting up oauth";
 
     QOAuth2AuthorizationCodeFlow m_oauth;
-    m_oauth.setUserAgent(USER_AGENT);
     m_oauth.setAuthorizationUrl(QUrl("https://www.pathofexile.com/oauth/authorize"));
     m_oauth.setAccessTokenUrl(QUrl("https://www.pathofexile.com/oauth/token"));
     m_oauth.setClientIdentifier("acquisition");
     m_oauth.setScope("account:leagues account:stashes account:characters");
+    m_oauth.setUserAgent(USER_AGENT);
     m_oauth.setPkceMethod(QOAuth2AuthorizationCodeFlow::PkceMethod::S256);
-
-    QOAuthHttpServerReplyHandler m_handler(0, qApp);
-    m_handler.setCallbackPath("/auth/path-of-exile");
-    m_handler.setCallbackText("Callback text");
-    m_oauth.setReplyHandler(&m_handler);
     m_oauth.setModifyParametersFunction(
         [&](QAbstractOAuth::Stage stage, QMultiMap<QString, QVariant>* parameters) {
             if (parameters->contains("redirect_uri")) {
-                QUrl url("http://127.0.0.1");
-                url.setPort(m_handler.port());
-                url.setPath(m_handler.callbackPath(), QUrl::ParsingMode::StrictMode);
-                parameters->replace("redirect_uri", url.toString().toLatin1());
+                QLOG_INFO() << "REDIRECT_URI =" << parameters->value("redirect_uri");
+                auto redirect_uri = parameters->value("redirect_uri").toByteArray();
+                redirect_uri.replace("localhost", "127.0.0.1");
+                parameters->replace("redirect_uri", redirect_uri);
+                //QUrl url("http://127.0.0.1");
+                //url.setPort(m_handler.port());
+                //url.setPath(m_handler.callbackPath(), QUrl::ParsingMode::StrictMode);
+                //parameters->replace("redirect_uri", url.toString().toLatin1());
             };
             for (const auto& key : parameters->keys()) {
                 QLOG_INFO() << "****" << int(stage) << ":" << key << "=" << parameters->value(key);
             };
         });
 
-    QObject::connect(&m_handler, &QOAuthHttpServerReplyHandler::callbackDataReceived, qApp, [=](const QByteArray& data) {
-        QLOG_INFO() << "callback received:" << data;
-    });
-
-    QObject::connect(&m_handler, &QOAuthHttpServerReplyHandler::replyDataReceived, qApp, [=](const QByteArray& data) {
-        QLOG_INFO() << "reply data:" << data;
-    });
+    QOAuthHttpServerReplyHandler m_handler(QHostAddress("http://127.0.0.1"), 0);
+    m_handler.setCallbackPath("/auth/path-of-exile");
+    m_handler.setCallbackText("Callback text");
 
     QObject::connect(&m_oauth, &QAbstractOAuth::authorizeWithBrowser, qApp, &QDesktopServices::openUrl);
-    QObject::connect(&m_oauth, &QAbstractOAuth::granted, qApp, [&]() {
-        // Here we use QNetworkRequestFactory to store the access token
-        QLOG_INFO() << "Bearer token" << m_oauth.token().toLatin1();
-        m_handler.close();
-    });
+    QObject::connect(&m_oauth, &QAbstractOAuth::granted, qApp,
+        [&]() {
+            QLOG_INFO() << "OAUTH BEARER TOKEN" << m_oauth.token();
+            m_handler.close();
+        });
     QObject::connect(&m_handler, &QOAuthHttpServerReplyHandler::tokensReceived, qApp,
         [&](const QVariantMap& tokens) {
-                         for (const auto& item : tokens.keys()) {
-                             QLOG_INFO() << "TOKENS" << item << tokens.value(item).toString();
-                         };
+            for (const auto& item : tokens.keys()) {
+                QLOG_INFO() << "TOKENS" << item << tokens.value(item).toString();
+            };
+        });
+    QObject::connect(&m_handler, &QOAuthHttpServerReplyHandler::callbackDataReceived, qApp,
+        [=](const QByteArray& data) {
+            QLOG_INFO() << "HANDLER CALLBACK DATA:" << data;
+        });
+    QObject::connect(&m_handler, &QOAuthHttpServerReplyHandler::replyDataReceived, qApp,
+        [=](const QByteArray& data) {
+            QLOG_INFO() << "HANDER REPLY DATA:" << data;
         });
 
-    QLOG_INFO() << "calling listen";
-
-    // Initiate the authorization
-    if (m_handler.listen()) {
-        QLOG_INFO() << "calling grant";
-        m_oauth.grant();
-    };
+    m_oauth.setReplyHandler(&m_handler);
     m_oauth.grant();
     */
-
 }

@@ -1,6 +1,13 @@
 target_include_directories(acquisition PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
+    # This second line is a compromise that violates the
+    # rest of the project layout, but the headers for
+    # QML_ELEMENT objects must be directly on the include
+    # path, not in a subdirectory
+    ${CMAKE_CURRENT_SOURCE_DIR}/acquisition
 )
+
+add_subdirectory("acquisition/qml")
 
 # Acquisition
 target_sources(acquisition PRIVATE
@@ -9,8 +16,8 @@ target_sources(acquisition PRIVATE
     "acquisition/command_line.cpp"
     "acquisition/command_line.h"
     "acquisition/constants.h"
-    "acquisition/filters.cpp"
-    "acquisition/filters.h"
+    "acquisition/search_filters.cpp"
+    "acquisition/search_filters.h"
     "acquisition/main.cpp"
     "acquisition/settings.cpp"
     "acquisition/settings.h"
@@ -103,8 +110,14 @@ target_sources(acquisition PRIVATE
     "acquisition/utils/utils.h"
 )
 
+#[[
 # User interface
 target_sources(acquisition PRIVATE
+    "acquisition/widgets/filters_panel.cpp"
+    "acquisition/widgets/filters_panel.h"
     "acquisition/widgets/main_window.cpp"
     "acquisition/widgets/main_window.h"
+    "acquisition/widgets/type_filters_panel.cpp"
+    "acquisition/widgets/type_filters_panel.h"
 )
+#]]

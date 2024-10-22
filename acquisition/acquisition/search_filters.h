@@ -1,27 +1,27 @@
 #pragma once
 
 #include <QObject>
-//#include <QQmlEngine>
+#include <QQmlEngine>
 
-class Filter : public QObject {
+class SearchFilters : public QObject {
     Q_OBJECT
-    //Q_PROPERTY(QStringList itemCategories MEMBER m_item_categories CONSTANT);
-    //Q_PROPERTY(QStringList itemRarities MEMBER m_item_rarities CONSTANT);
-    //Q_PROPERTY(QStringList characterClasses MEMBER m_character_classes CONSTANT);
-    //Q_PROPERTY(QStringList mapSeries MEMBER m_map_series CONSTANT);
-    //Q_PROPERTY(QStringList mapCompletionRewards MEMBER m_map_completion_rewards CONSTANT);
-    //Q_PROPERTY(QStringList heistContractObjectiveValues MEMBER m_heist_contract_objective_values CONSTANT);
-    //Q_PROPERTY(QStringList ultimatumChallengeTypes MEMBER m_ultimatum_challenge_types CONSTANT);
-    //Q_PROPERTY(QStringList ultimatumRewardTypes MEMBER m_ultimatum_reward_types CONSTANT);
-    //Q_PROPERTY(QStringList ultimatumRequiredItems MEMBER m_ultimatum_required_items CONSTANT);
-    //Q_PROPERTY(QStringList ultimatumRewardUniques MEMBER m_ultimatum_reward_uniques CONSTANT);
-    //Q_PROPERTY(QStringList corpseTypes MEMBER m_corpse_types CONSTANT);
-    //Q_PROPERTY(QStringList foilVariations MEMBER m_foil_variations CONSTANT);
-    //QML_ELEMENT
-    //QML_SINGLETON
+    Q_PROPERTY(QStringList itemCategories MEMBER m_item_categories CONSTANT);
+    Q_PROPERTY(QStringList itemRarities MEMBER m_item_rarities CONSTANT);
+    Q_PROPERTY(QStringList characterClasses MEMBER m_character_classes CONSTANT);
+    Q_PROPERTY(QStringList mapSeries MEMBER m_map_series CONSTANT);
+    Q_PROPERTY(QStringList mapCompletionRewards MEMBER m_map_completion_rewards CONSTANT);
+    Q_PROPERTY(QStringList heistContractObjectiveValues MEMBER m_heist_contract_objective_values CONSTANT);
+    Q_PROPERTY(QStringList ultimatumChallengeTypes MEMBER m_ultimatum_challenge_types CONSTANT);
+    Q_PROPERTY(QStringList ultimatumRewardTypes MEMBER m_ultimatum_reward_types CONSTANT);
+    Q_PROPERTY(QStringList ultimatumRequiredItems MEMBER m_ultimatum_required_items CONSTANT);
+    Q_PROPERTY(QStringList ultimatumRewardUniques MEMBER m_ultimatum_reward_uniques CONSTANT);
+    Q_PROPERTY(QStringList corpseTypes MEMBER m_corpse_types CONSTANT);
+    Q_PROPERTY(QStringList foilVariations MEMBER m_foil_variations CONSTANT);
+    QML_ELEMENT
+    QML_SINGLETON
 
 public:
-    Filter(QObject* parent = nullptr);
+    SearchFilters(QObject* parent = nullptr);
 
     enum class Type {
         Category,

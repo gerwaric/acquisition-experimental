@@ -1,6 +1,6 @@
 #pragma once
 
-#include <json_struct/json_struct.h>
+#include <acquisition/json_struct/json_struct.h>
 
 #include <optional>
 #include <string>

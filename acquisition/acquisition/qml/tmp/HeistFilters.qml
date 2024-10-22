@@ -40,7 +40,7 @@ ColumnLayout {
         TextField { placeholderText: "Max"; Layout.preferredWidth: 40; inputMethodHints: Qt.ImhDigitsOnly }
 
         Label { text: "Contract Objective Value"; Layout.columnSpan: 2 }
-        ComboBox { model: Filter.heistContractObjectiveValues; Layout.fillWidth: true }
+        ComboBox { model: SearchFilters.heistContractObjectiveValues; Layout.fillWidth: true }
 
         Label { text: "Lockpicking Level" }
         TextField { placeholderText: "Min"; Layout.preferredWidth: 40; inputMethodHints: Qt.ImhDigitsOnly }

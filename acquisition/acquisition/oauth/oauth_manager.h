@@ -41,6 +41,7 @@ public:
         QNetworkAccessManager& network_manager,
         const OAuthSettings& settings,
         QObject* parent);
+
     void addAuthorization(QNetworkRequest& request) const;
 public slots:
     void setToken(const OAuthToken& token);

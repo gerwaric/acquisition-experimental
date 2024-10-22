@@ -47,7 +47,7 @@ ColumnLayout {
 
         Label { text: "Corpse Type" }
         ComboBox {
-            model: Filter.corpseTypes
+            model: SearchFilters.corpseTypes
             Layout.columnSpan: 2
             Layout.fillWidth: true
         }
@@ -157,7 +157,7 @@ ColumnLayout {
 
         Label { text: "Fail Variation" }
         ComboBox {
-            model: Filter.foilVariations
+            model: SearchFilters.foilVariations
             Layout.columnSpan: 2
             Layout.fillWidth: true
         }

@@ -2,7 +2,7 @@
 
 #include <json_struct/json_struct.h>
 
-#include <acquisition/utils/json.h>
+#include <utils/json.h>
 
 #include <QString>
 

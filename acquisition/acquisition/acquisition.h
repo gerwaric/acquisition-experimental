@@ -8,7 +8,7 @@
 #include <acquisition/data_model/tree_model.h>
 
 #include <QObject>
-//#include <QQmlEngine>
+#include <QQmlEngine>
 
 #include <QAbstractItemModel>
 #include <QAction>
@@ -31,12 +31,12 @@ class UserDataStore;
 class Acquisition : public QObject
 {
     Q_OBJECT
-    //Q_PROPERTY(QList<QAction*> leagueActions MEMBER m_league_actions NOTIFY leagueListChanged)
-    //Q_PROPERTY(QList<QAction*> refreshActions MEMBER m_refresh_actions CONSTANT)
-    //Q_PROPERTY(QList<QAction*> loggingActions MEMBER m_logging_actions CONSTANT)
-    //Q_PROPERTY(QAbstractItemModel* treeModel READ treeModel NOTIFY treeModelChanged)
-    //QML_ELEMENT
-    //QML_SINGLETON
+    Q_PROPERTY(QList<QAction*> leagueActions MEMBER m_league_actions NOTIFY leagueListChanged)
+    Q_PROPERTY(QList<QAction*> refreshActions MEMBER m_refresh_actions CONSTANT)
+    Q_PROPERTY(QList<QAction*> loggingActions MEMBER m_logging_actions CONSTANT)
+    Q_PROPERTY(QAbstractItemModel* treeModel READ treeModel NOTIFY treeModelChanged)
+    QML_ELEMENT
+    QML_SINGLETON
 
 public:
     Acquisition(QObject* parent = nullptr);

@@ -33,7 +33,7 @@ ColumnLayout {
 
         Label { text: "Character Class" }
         ComboBox {
-            model: Filter.characterClasses
+            model: SearchFilters.characterClasses
             Layout.columnSpan: 2
             Layout.fillWidth: true
         }

@@ -17,9 +17,9 @@ ColumnLayout {
         columns: 2
 
         Label { text: "Item Category"; }
-        ComboBox { model: Filter.itemCategories; }
+        ComboBox { model: SearchFilters.itemCategories; }
 
         Label { text: "Item Rarity" }
-        ComboBox { model: Filter.itemRarities }
+        ComboBox { model: SearchFilters.itemRarities }
     }
 }

@@ -1,6 +1,6 @@
-#include <acquisition/filters.h>
+#include <acquisition/search_filters.h>
 
-Filter::Filter(QObject* parent) : QObject(parent)
+SearchFilters::SearchFilters(QObject* parent) : QObject(parent)
 {
     m_item_categories = {
         "Any",
