@@ -1,8 +1,7 @@
-#pragma once
+#ifndef JSON_STRUCT_QT_H
+#define JSON_STRUCT_QT_H
 
-#include <acquisition/utils/utils.h>
-
-#include <json_struct/json_struct.h>
+#include "json_struct.h"
 
 #include <QByteArray>
 #include <QDateTime>
@@ -146,3 +145,5 @@ namespace JS {
     };
 
 }
+
+#endif

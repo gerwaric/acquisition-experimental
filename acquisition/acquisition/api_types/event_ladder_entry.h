@@ -1,9 +1,8 @@
 #pragma once
 
-#include <json_struct/json_struct.h>
+#include <acquisition/utils/json_struct_qt.h>
 
 #include <optional>
-#include <string>
 
 namespace poe_api{
 
@@ -12,8 +11,8 @@ namespace poe_api{
     struct EventLadderEntry {
 
         struct PrivateLeague {
-            std::string name; // string
-            std::string url; // string a url link to a Path of Exile Private League
+            QString name; // string
+            QString url; // string a url link to a Path of Exile Private League
             JS_OBJ(name, url);
         };
 

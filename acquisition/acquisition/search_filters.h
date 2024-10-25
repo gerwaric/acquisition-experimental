@@ -18,7 +18,6 @@ class SearchFilters : public QObject {
     Q_PROPERTY(QStringList corpseTypes MEMBER m_corpse_types CONSTANT);
     Q_PROPERTY(QStringList foilVariations MEMBER m_foil_variations CONSTANT);
     QML_ELEMENT
-    QML_SINGLETON
 
 public:
     SearchFilters(QObject* parent = nullptr);
@@ -136,7 +135,7 @@ public:
     };
     Q_ENUM(UltimatumFilters)
 
-    enum class Miscelanneous  {
+    enum class Miscellaneous  {
         QualityMin,
         QualityMax,
         ItemLevelMin,
@@ -170,7 +169,7 @@ public:
         FoilVariation,
         ScourgeTier
     };
-    Q_ENUM(Miscelanneous)
+    Q_ENUM(Miscellaneous)
 
 private:
     QStringList m_item_categories;

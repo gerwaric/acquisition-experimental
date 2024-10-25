@@ -1,9 +1,8 @@
 #pragma once
 
-//#include <acquisition/data_stores/data_store.h>
-#include <acquisition/utils/json.h>
+#include <acquisition/utils/json_struct_qt.h>
+#include <acquisition/utils/utils.h>
 
-#include <json_struct/json_struct.h>
 #include <QsLog/QsLog.h>
 
 #include <QObject>

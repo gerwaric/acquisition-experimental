@@ -1,6 +1,8 @@
 #include <acquisition/widgets/main_window.h>
 
 #include <acquisition/acquisition.h>
+#include <acquisition/widgets/type_filters_panel.h>
+#include <acquisition/widgets/weapon_filters_panel.h>
 
 #include <QCheckBox>
 #include <QComboBox>
@@ -19,21 +21,22 @@ MainWindow::MainWindow(Acquisition& acquisition)
 {
     setMenuBar(new QMenuBar);
     setStatusBar(new QStatusBar);
-    
 
-    QScrollArea* searchFilters = new QScrollArea;
-    QVBoxLayout* searchFiltersLayout = new QVBoxLayout;
-    searchFilters->setLayout(searchFiltersLayout);
-    searchFiltersLayout->addWidget(typeFiltersHeader);
-    searchFiltersLayout->addWidget(typeFilters);
-    searchFiltersLayout->addStretch();
+    QVBoxLayout* search_layout = new QVBoxLayout;
+    search_layout->addWidget(new TypeFiltersPanel(this));
+    search_layout->addWidget(new WeaponFiltersPanel(this));
+    search_layout->addStretch();
 
-    QTreeView* searchResults = new QTreeView;
-    searchResults->setModel(acquisition.treeModel());
+    QScrollArea* search_scroll = new QScrollArea(this);
+    search_scroll->setLayout(search_layout);
+    search_scroll->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
-    setCentralWidget(new QWidget);
+    QTreeView* results_view = new QTreeView(this);
+    results_view->setModel(acquisition.treeModel());
+
+    setCentralWidget(new QWidget(this));
     centralWidget()->setLayout(new QHBoxLayout);
-    centralWidget()->layout()->addWidget(searchFilters);
-    centralWidget()->layout()->addWidget(searchResults);
+    centralWidget()->layout()->addWidget(search_scroll);
+    centralWidget()->layout()->addWidget(results_view);
 }
 

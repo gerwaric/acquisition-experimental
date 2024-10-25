@@ -1,9 +1,10 @@
 #pragma once
 
-#include <QWidget>
+#include <acquisition/widgets/filters_panel.h>
 
-class TypeFiltersPanel : public QWidget {
+class TypeFiltersPanel : public FiltersPanel {
     Q_OBJECT
 public:
-    TypeFiltersPanel();
+    TypeFiltersPanel(QWidget* parent = nullptr);
+    virtual ~TypeFiltersPanel() {};
 };

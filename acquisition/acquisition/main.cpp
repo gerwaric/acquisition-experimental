@@ -17,10 +17,8 @@
     along with this program.If not, see < https://www.gnu.org/licenses/>.
 */
 
-//#include <main.h>
-
 #include <acquisition/acquisition.h>
-#include <acquisition/command_line.h>
+#include <acquisition/utils/command_line.h>
 //#include <acquisition/widgets/main_window.h>
 
 #include <QsLog/QsLog.h>
@@ -28,12 +26,15 @@
 //#include <QApplication>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+
 #include <QString>
 
-//#include <acquisition/constants.h>
-//#include <QOAuth2AuthorizationCodeFlow>
-//#include <QOAuthHttpServerReplyHandler>
-//#include <QDesktopServices>
+/*
+#include <acquisition/constants.h>
+#include <qoauth2authorizationcodeflow.h>
+#include <qoauthhttpserverreplyhandler.h>
+#include <QDesktopServices>
+*/
 
 int main(int argc, char* argv[])
 {
@@ -41,24 +42,24 @@ int main(int argc, char* argv[])
 
     // Process the command line options.
     CommandLine command_line(app);
-    const QsLogging::Level logging_level = command_line.logging_level();
-    const QString data_directory = command_line.data_directory();
+    const QsLogging::Level level = command_line.logging_level();
+    const QString directory = command_line.data_directory();
 
-    // Setup logging before creating the QML engine so that we can configure
+    // Setup logging before creating the QML engine so that we can configure and
     // use the data directory for log messages now. Otherwise we'd have to wait
     // until after the Acquisition singleton instance is constructed to set
     // the data directory. This would leave us unable to log anything during
     // the construction of that object.
-    const QString logging_filename = Acquisition::makeLogFilename(data_directory);
+    const QString logging_filename = Acquisition::makeLogFilename(directory);
     QsLogging::Logger& logger = QsLogging::Logger::instance();
-    logger.setLoggingLevel(QsLogging::TraceLevel);
+    logger.setLoggingLevel(level);
     logger.addDestination(QsLogging::DestinationFactory::MakeDebugOutputDestination());
     logger.addDestination(QsLogging::DestinationFactory::MakeFileDestination(logging_filename,
         QsLogging::EnableLogRotation,
         QsLogging::MaxSizeBytes(10 * 1024 * 1024),
         QsLogging::MaxOldLogCount(0)));
 
-    // This is where we would load the QML engine and acquisition singleton
+    // Setup the QML engine.
     QQmlApplicationEngine engine;
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed, &app,
         [](const QUrl& url) {
@@ -67,27 +68,30 @@ int main(int argc, char* argv[])
         },
         Qt::QueuedConnection);
 
-    // Get the Acquisition object so we can set the data directory.
+    // Get the Acquisition object and load the data directory.
     Acquisition* acquisition = engine.singletonInstance<Acquisition*>("MyAcquisition", "Acquisition");
     if (!acquisition) {
         QLOG_FATAL() << "Unable to retrieve the Acquisition instance";
         exit(EXIT_FAILURE);
     };
-    acquisition->init(data_directory);
+    acquisition->setDataDirectory(directory);
+
+    // Load the UI
+    engine.loadFromModule("MyAcquisition", "Main");
+
+    QLOG_DEBUG() << "Running Application";
+    return app.exec();
 
     //QLOG_DEBUG() << "Creating Acquisition instance";
     //Acquisition acquisition;
     //acquisition.init(data_directory);
+    
     //QLOG_DEBUG() << "Creating MainWindow instance";
     //MainWindow main_window(acquisition);
     //main_window.show();
-   
-    QLOG_DEBUG() << "Running Application";
-    return app.exec();
 
     /*
     QLOG_INFO() << "setting up oauth";
-
     QOAuth2AuthorizationCodeFlow m_oauth;
     m_oauth.setAuthorizationUrl(QUrl("https://www.pathofexile.com/oauth/authorize"));
     m_oauth.setAccessTokenUrl(QUrl("https://www.pathofexile.com/oauth/token"));
@@ -140,4 +144,5 @@ int main(int argc, char* argv[])
     m_oauth.setReplyHandler(&m_handler);
     m_oauth.grant();
     */
+
 }

@@ -5,7 +5,7 @@
 #include <QsLog/QsLog.h>
 
 CharacterNode::CharacterNode(const poe_api::Character& character, TreeNode* parent)
-    : TreeNode(character.name, parent)
+    : TreeNode(NodeType::Character, character.name, parent)
     , m_character(character)
 {
     QLOG_TRACE() << "Creating CharacterNode for" << character.name << "under" << parent->name();

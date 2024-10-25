@@ -1,11 +1,10 @@
 #pragma once
 
+#include <acquisition/utils/json_struct_qt.h>
+
 #include <acquisition/api_types/pvp_ladder_team_member.h>
 
-#include <json_struct/json_struct.h>
-
 #include <optional>
-#include <string>
 #include <vector>
 
 namespace poe_api{
@@ -19,7 +18,7 @@ namespace poe_api{
         std::optional<unsigned> points; // ? uint
         std::optional<unsigned> games_played; // ? uint
         std::optional<unsigned> cumulative_opponent_points; // ? uint
-        std::optional<std::string> last_game_time; // ? string date time(ISO8601)
+        std::optional<QString> last_game_time; // ? string date time(ISO8601)
         std::vector<PvPLadderTeamMember> members; // array of PvPLadderTeamMember
 
         JS_OBJ(rank, rating, points, games_played, cumulative_opponent_points, last_game_time, members);

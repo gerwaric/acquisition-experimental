@@ -1,8 +1,8 @@
 #pragma once
 
-#include <acquisition/api_types/account.h>
+#include <acquisition/utils/json_struct_qt.h>
 
-#include <json_struct/json_struct.h>
+#include <acquisition/api_types/account.h>
 
 #include <optional>
 #include <string>
@@ -22,10 +22,10 @@ namespace poe_api{
         };
 
         struct Character {
-            std::string id; // string a unique 64 digit hexadecimal string
-            std::string name; // string
+            QString id; // string a unique 64 digit hexadecimal string
+            QString name; // string
             unsigned level; // uint
-            std::string class_; // string
+            QString class_; // string
             std::optional<unsigned> time; // ? uint time taken to complete the league objective in seconds
             std::optional<unsigned> score; // ? uint count of league objective completions
             // TBD progress; // ? object the values of this depend on the league objective

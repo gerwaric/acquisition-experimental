@@ -1,5 +1,6 @@
 #pragma once
 
+#include <json_struct/json_struct.h>
 #include <QsLog/QsLog.h>
 
 #include <QByteArray>
@@ -10,6 +11,17 @@
 #include <string_view>
 
 namespace utils {
+
+    template<typename Struct>
+    std::unique_ptr<Struct> parse_json(const QByteArray& bytes)
+    {
+        auto payload = std::make_unique<Struct>();
+        JS::ParseContext parseContext(bytes);
+        if (parseContext.parseTo(payload) != JS::Error::NoError) {
+            QLOG_ERROR() << "Error parsing JSON to" << typeid(Struct).name() << ":" << parseContext.makeErrorString();
+        };
+        return std::move(payload);
+    };
 
     constexpr std::array logging_level_names = {
         std::make_pair(QsLogging::TraceLevel, "Trace"),

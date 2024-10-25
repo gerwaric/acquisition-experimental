@@ -20,6 +20,8 @@ public:
     int columnCount() const override { return ColumnCount; };
     QVariant data(int column) const override;
 
+    const poe_api::Item& item() const { return m_item; };
+
     enum class ItemType { None, Equipable, Stackable, Other };
 
 private:

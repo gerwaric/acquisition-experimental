@@ -1,18 +1,17 @@
 #pragma once
 
-#include <json_struct/json_struct.h>
+#include <acquisition/utils/json_struct_qt.h>
 
 #include <optional>
-#include <string>
 
 namespace poe_api{
 
     // https://www.pathofexile.com/developer/docs/reference#type-LeagueRule
     
     struct LeagueRule {
-        std::string                              id;             // string examples : Hardcore, NoParties(SSF)
-        std::string                              name;           // string
-        std::optional<std::string>                    description;    // ? string
+        QString                              id;             // string examples : Hardcore, NoParties(SSF)
+        QString                              name;           // string
+        std::optional<QString>                    description;    // ? string
         JS_OBJ(id, name, description);
     };
 

@@ -1,15 +1,21 @@
 #pragma once
 
-#include <QCheckBox>
-#include <QPushButton>
 #include <QWidget>
+
+class QCheckBox;
+class QPushButton;
+class QGridLayout;
 
 class FiltersPanel : public QWidget {
     Q_OBJECT
 public:
-    FiltersPanel();
+    FiltersPanel(const QString& title, QWidget* parent = nullptr);
+    virtual ~FiltersPanel() {};
 
-    std::unique_ptr<QCheckBox> m_enabled;
-    std::unique_ptr<QPushButton> m_visible;
-    std::unique_ptr<QWidget> m_contents;
+protected:
+    QGridLayout* m_layout;
+
+private:
+    QCheckBox* m_enabled;
+    QPushButton* m_visible;
 };

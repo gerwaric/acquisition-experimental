@@ -1,10 +1,6 @@
 #pragma once
 
-#include <json_struct/json_struct.h>
-
-#include <acquisition/utils/json.h>
-
-#include <QString>
+#include <acquisition/utils/json_struct_qt.h>
 
 #include <optional>
 

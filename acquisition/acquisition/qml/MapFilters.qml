@@ -37,7 +37,7 @@ ColumnLayout {
 
         Label { text: "Map Series" }
         ComboBox {
-            model: SearchFilters.mapSeries
+            model: Acquisition.searchFilters.mapSeries
             Layout.columnSpan: 2
             Layout.fillWidth: true
         }
@@ -58,7 +58,7 @@ ColumnLayout {
 
         Label { text: "Map Completion Reward" }
         ComboBox {
-            model: SearchFilters.mapCompletionRewards
+            model: Acquisition.searchFilters.mapCompletionRewards
             Layout.columnSpan: 2
             Layout.fillWidth: true
         }

@@ -48,11 +48,11 @@ public:
     void appendStash(const poe_api::StashTab& stash);
     void appendCharacter(const poe_api::Character& character);
 
-private:
-
     inline const TreeNode* getNode(const QModelIndex& index) const {
         return index.isValid() ? static_cast<TreeNode*>(index.internalPointer()) : &m_root;
     };
+
+private:
 
     TreeNode m_root;
     TreeNode& m_character_root;

@@ -8,9 +8,8 @@ ApplicationWindow {
     height: 600
     visible: true
     title: "Acquisition"
-    /*
 
-    //menuBar: MainMenuBar {}
+    menuBar: MainMenuBar {}
 
     SplitView {
         id: splitView
@@ -33,16 +32,16 @@ ApplicationWindow {
                     model: ["Search Items"]
                 }
 
-                //TypeFilters {}
-                //WeaponFilters {}
-                //ArmourFilters {}
-                //SocketFilters {}
-                //RequirementFilters {}
-                //MapFilters {}
-                //HeistFilters {}
-                //SanctumFilters {}
-                //UltimatumFilters {}
-                //MiscellaneousFilters {}
+                TypeFilters {}
+                WeaponFilters {}
+                ArmourFilters {}
+                SocketFilters {}
+                RequirementFilters {}
+                MapFilters {}
+                HeistFilters {}
+                SanctumFilters {}
+                UltimatumFilters {}
+                MiscellaneousFilters {}
 
                 Rectangle { Layout.fillHeight: true }
             }
@@ -71,7 +70,7 @@ ApplicationWindow {
                 ScrollBar.horizontal: ScrollBar {}
                 ScrollBar.vertical: ScrollBar {}
 
-                //model: Acquisition.treeModel
+                model: Acquisition.treeModel
 
                 delegate: TreeViewDelegate {
                     id: itemViewDelegate
@@ -82,5 +81,4 @@ ApplicationWindow {
             }
         }
     }
-    */
 }

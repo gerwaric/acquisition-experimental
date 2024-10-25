@@ -31,7 +31,7 @@ ColumnLayout {
         TextField { placeholderText: "Min"; Layout.preferredWidth: 40; inputMethodHints: Qt.ImhDigitsOnly }
         TextField { placeholderText: "Max"; Layout.preferredWidth: 40; inputMethodHints: Qt.ImhDigitsOnly }
 
-        Label { text: "Reward Roome Revealed" }
+        Label { text: "Reward Rooms Revealed" }
         TextField { placeholderText: "Min"; Layout.preferredWidth: 40; inputMethodHints: Qt.ImhDigitsOnly }
         TextField { placeholderText: "Max"; Layout.preferredWidth: 40; inputMethodHints: Qt.ImhDigitsOnly }
 
@@ -39,8 +39,12 @@ ColumnLayout {
         TextField { placeholderText: "Min"; Layout.preferredWidth: 40; inputMethodHints: Qt.ImhDigitsOnly }
         TextField { placeholderText: "Max"; Layout.preferredWidth: 40; inputMethodHints: Qt.ImhDigitsOnly }
 
-        Label { text: "Contract Objective Value"; Layout.columnSpan: 2 }
-        ComboBox { model: SearchFilters.heistContractObjectiveValues; Layout.fillWidth: true }
+        Label { text: "Contract Objective Value"}
+        ComboBox {
+            model: Acquisition.searchFilters.heistContractObjectiveValues
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+        }
 
         Label { text: "Lockpicking Level" }
         TextField { placeholderText: "Min"; Layout.preferredWidth: 40; inputMethodHints: Qt.ImhDigitsOnly }

@@ -1,12 +1,7 @@
 #pragma once
 
-#include <json_struct/json_struct.h>
-
-#include <acquisition/utils/json.h>
 #include <acquisition/api_types/passive_group.h>
 #include <acquisition/api_types/passive_node.h>
-
-#include <QString>
 
 #include <map>
 #include <optional>

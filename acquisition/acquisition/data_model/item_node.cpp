@@ -1,7 +1,7 @@
 #include <acquisition/data_model/item_node.h>
 
 ItemNode::ItemNode(const poe_api::Item& item, TreeNode* parent)
-    : TreeNode(item.baseType, parent)
+    : TreeNode(NodeType::Item, item.baseType, parent)
     , m_item(item)
 {
     if (item.socketedItems) {

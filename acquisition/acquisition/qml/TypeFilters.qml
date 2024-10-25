@@ -17,9 +17,12 @@ ColumnLayout {
         columns: 2
 
         Label { text: "Item Category"; }
-        ComboBox { model: SearchFilters.itemCategories; }
+        ComboBox {
+            model: Acquisition.searchFilters.itemCategories;
+            onActivated: Acquisition.search.setItemCategory(text);
+        }
 
         Label { text: "Item Rarity" }
-        ComboBox { model: SearchFilters.itemRarities }
+        ComboBox { model: Acquisition.searchFilters.itemRarities }
     }
 }

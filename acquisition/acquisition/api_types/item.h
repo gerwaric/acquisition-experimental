@@ -1,14 +1,11 @@
 #pragma once
 
-#include <json_struct/json_struct.h>
+#include <acquisition/utils/json_struct_qt.h>
 
-#include <acquisition/utils/json.h>
 #include <acquisition/api_types/crucible_node.h>
 #include <acquisition/api_types/frame_type.h>
 #include <acquisition/api_types/item_property.h>
 #include <acquisition/api_types/item_socket.h>
-
-#include <QString>
 
 #include <optional>
 #include <unordered_map>

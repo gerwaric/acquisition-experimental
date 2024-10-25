@@ -1,8 +1,8 @@
 #include <acquisition/endpoint_manager.h>
 
 #include <acquisition/rate_limit/rate_limiter.h>
+#include <acquisition/utils/json_struct_qt.h>
 
-#include <json_struct/json_struct.h>
 #include <QsLog/QsLog.h>
 
 #include <QNetworkRequest>

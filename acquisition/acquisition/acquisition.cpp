@@ -3,14 +3,14 @@
 #include <acquisition/api_types/character.h>
 #include <acquisition/api_types/league.h>
 #include <acquisition/api_types/stash_tab.h>
-#include <acquisition/command_line.h>
 #include <acquisition/constants.h>
 #include <acquisition/data_stores/league_data_store.h>
 #include <acquisition/data_stores/user_data_store.h>
 #include <acquisition/oauth/oauth_manager.h>
 #include <acquisition/rate_limit/rate_limiter.h>
 #include <acquisition/settings.h>
-#include <acquisition/utils/json.h>
+#include <acquisition/utils/command_line.h>
+#include <acquisition/utils/utils.h>
 
 #include <QsLog/QsLog.h>
 
@@ -41,25 +41,22 @@ Acquisition::Acquisition(QObject* parent) : QObject(parent)
     m_oauth_manager = new OAuthManager(*m_network_manager, s_oauth_settings, this);
     m_rate_limiter = new RateLimiter(*m_network_manager, this);
     m_tree_model = new TreeModel(this);
+    m_search_filters = new SearchFilters(this);
 
     connect(m_oauth_manager, &OAuthManager::accessGranted, this, &Acquisition::onAccessGranted);
 }
 
-void Acquisition::init(const QString& directory)
+void Acquisition::setDataDirectory(const QString& directory)
 {
     QLOG_DEBUG() << "Acquisition: loading settings and data from" << directory;
     m_settings = new Settings(directory, this);
-
-    QLOG_DEBUG() << "Acquisition: loading user database";
     m_user_data = new UserDataStore(directory, this);
-
-    QLOG_DEBUG() << "Acquisition: loading league database";
     m_league_data = new LeagueDataStore(directory, this);
 
     loadSettings();
-    initLeagueMenu();
-    initRefreshMenu();
-    initLoggingMenu();
+    initLeagueActions();
+    initRefreshActions();
+    initLoggingActions();
 }
 
 QString Acquisition::makeLogFilename(const QString& directory)
@@ -71,34 +68,36 @@ void Acquisition::loadSettings()
 {
     QLOG_DEBUG() << "Acquisition: loading application settings";
 
-    if (!m_settings->username().isEmpty()) {
+    if (m_settings->username().isEmpty()) {
+        QLOG_DEBUG() << "Acquisition: username is unset";
+    } else {
         const QString username = m_settings->username();
         QLOG_DEBUG() << "Acquisition: username is" << username;
         m_user_data->setUsername(username);
         m_league_data->setUsername(username);
     };
 
-    if (!m_settings->league().isEmpty()) {
+    if (m_settings->league().isEmpty()) {
+        QLOG_DEBUG() << "Acquisition: league is unset";
+    } else {
         const QString league = m_settings->league();
         QLOG_DEBUG() << "Acquisition: league is" << league;
         m_league_data->setLeague(league);
     };
 
-    int i;
-
-    QLOG_DEBUG() << "Acquisition: loading stored characters";
     m_characters = m_league_data->getCharacters();
-    i = 0;
-    for (auto& character : m_characters) {
-        QLOG_TRACE() << "Acquisition: loading character" << ++i << character->name;
+    QLOG_DEBUG() << "Acquisition: loading" << m_characters.size() << "stored characters";
+    for (size_t i = 0; i < m_characters.size(); ++i) {
+        auto character = m_characters[i];
+        QLOG_TRACE() << "Acquisition: loading character" << i << "/" << m_characters.size() << character->name;
         m_tree_model->appendCharacter(*character);
-    };
+    }
 
-    QLOG_DEBUG() << "Application: loading stored stashes";
     m_stashes = m_league_data->getStashes();
-    i = 0;
-    for (auto& stash : m_stashes) {
-        QLOG_TRACE() << "Application: loading stash" << ++i << stash->type + ":" << stash->name;
+    QLOG_DEBUG() << "Application: loading" << m_stashes.size() << "stored stashes";
+    for (size_t i = 0; i < m_stashes.size(); ++i) {
+        auto stash = m_stashes[i];
+        QLOG_TRACE() << "Application: loading stash" << i << "/" << m_stashes.size() << stash->type + ":" << stash->name;
         m_tree_model->appendStash(*stash);
     };
 
@@ -106,31 +105,64 @@ void Acquisition::loadSettings()
 
     OAuthToken token = m_user_data->getStruct<OAuthToken>("oauth_token");
     if (token.isValid()) {
+        QLOG_DEBUG() << "Acquisition: found an OAuth token valid until" << token.expiration.value_or(QDateTime());
         m_oauth_manager->setToken(token);
     };
 
 }
 
-void Acquisition::initLeagueMenu()
+void Acquisition::initLeagueActions()
 {
     QLOG_DEBUG() << "Acquisition: initializing the league menu actions";
     const QString current_league = m_settings->league();
     if (!current_league.isEmpty()) {
-        QAction* action = new QAction(current_league, this);
+        QLOG_DEBUG() << "Acquisition: creating league action for" << current_league;
+        const QString display_name = utils::leaguePrettyName(current_league);
+        QAction* action = new QAction(display_name, this);
         action->setCheckable(true);
         action->setChecked(true);
+        action->setData(current_league);
+        connect(action, &QAction::triggered, this, &Acquisition::setLeague);
         m_league_actions = { action };
     };
     emit leagueListChanged();
 }
 
-void Acquisition::initRefreshMenu()
+void Acquisition::initRefreshActions()
 {
     QLOG_DEBUG() << "Acquisition: initializing the refresh menu actions";
-    m_refresh_actions = {};
+    QAction* action;
+
+    action = new QAction("Refresh Character List", this);
+    connect(action, &QAction::triggered, this, []() {});
+    m_refresh_actions.append(action);
+
+    action = new QAction("Refresh Stash List", this);
+    connect(action, &QAction::triggered, this, []() {});
+    m_refresh_actions.append(action);
+
+    action = new QAction("Refresh Character & Stash Lists", this);
+    connect(action, &QAction::triggered, this, []() {});
+    m_refresh_actions.append(action);
+
+    action = new QAction("Refresh Characters", this);
+    connect(action, &QAction::triggered, this, []() {});
+    m_refresh_actions.append(action);
+
+    action = new QAction("Refresh Stashes", this);
+    connect(action, &QAction::triggered, this, []() {});
+    m_refresh_actions.append(action);
+
+    action = new QAction("Refresh Characters & Stashes", this);
+    connect(action, &QAction::triggered, this, []() {});
+    m_refresh_actions.append(action);
+
+    action = new QAction("Refresh All", this);
+    connect(action, &QAction::triggered, this, []() {});
+    m_refresh_actions.append(action);
 }
 
-void Acquisition::initLoggingMenu()
+void Acquisition::initLoggingActions()
 {
     QLOG_DEBUG() << "Acquisition: initializing the logging menu actions";
     const QsLogging::Level current_logging_level = m_settings->loggingLevel();
@@ -140,23 +172,25 @@ void Acquisition::initLoggingMenu()
     for (const auto& pair : utils::logging_level_names) {
         const QsLogging::Level level = pair.first;
         const char* name = pair.second;
+        QLOG_DEBUG() << "Acquisition: creating logging action for" << level << name;
         QAction* action = new QAction(name, this);
         action->setCheckable(true);
         action->setChecked(level == current_logging_level);
         action->setData(level);
-        connect(action, &QAction::triggered, this, [=]() { setLoggingLevel(level); });
+        connect(action, &QAction::triggered, this, &Acquisition::setLoggingLevel);
         m_logging_actions.append(action);
     };
 }
 
 void Acquisition::authenticate()
 {
+    QLOG_INFO() << "Acquisition: authentication has been started";
     m_oauth_manager->requestAccess();
 }
 
 void Acquisition::onAccessGranted(const OAuthToken& token)
 {
-    QLOG_INFO() << "Acquisition: OAuth access granted";
+    QLOG_INFO() << "Acquisition: OAuth access has been granted";
     m_settings->setUsername(token.username);
     m_user_data->setUsername(token.username);
     m_user_data->setStruct("oauth_token", token);
@@ -167,30 +201,84 @@ void Acquisition::onAccessGranted(const OAuthToken& token)
 void Acquisition::openLogFile()
 {
     QUrl settings_url("file:///" + makeLogFilename(m_data_directory), QUrl::TolerantMode);
-    QLOG_DEBUG()<< "Application: opening log from" << settings_url.toString();
+    QLOG_DEBUG()<< "Application: opening log file:" << settings_url.toString();
     QDesktopServices::openUrl(settings_url);
 }
 
 void Acquisition::restoreDefaultLogLevel()
 {
-    if (m_settings->loggingLevel() == DEFAULT_LOGGING_LEVEL) {
+    const auto& default_level = DEFAULT_LOGGING_LEVEL;
+    QLOG_DEBUG() << "Acquisition: restoring default logging level:" << utils::loggingLevelName(default_level);
+    if (m_settings->loggingLevel() == default_level) {
         return;
     };
-    m_settings->setLoggingLevel(DEFAULT_LOGGING_LEVEL);
+    m_settings->setLoggingLevel(default_level);
     for (auto& action : m_logging_actions) {
-        action->setChecked(action->data() == DEFAULT_LOGGING_LEVEL);
+        action->setChecked(action->data() == default_level);
     };
 }
 
-void Acquisition::setLoggingLevel(QsLogging::Level level)
+void Acquisition::setLeague()
 {
-    QLOG_DEBUG() << "Acquisition: setting the logging level to" << level;
-    for (const auto action : m_logging_actions) {
-        const auto action_level = static_cast<QsLogging::Level>(action->data().toInt());
-        action->setChecked(action_level == level);
+    for (const auto action : m_league_actions) {
+        if (action->isChecked()) {
+            const QString league = action->data().toString();
+            QLOG_DEBUG() << "Acquisition: setting the league to" << league;
+            m_settings->setLeague(league);
+            return;
+        };
     };
-    m_settings->setLoggingLevel(level);
+    QLOG_WARN() << "Acquisition: unable to set the league";
 }
+
+
+void Acquisition::setLoggingLevel()
+{
+    for (const auto action : m_logging_actions) {
+        if (action->isChecked()) {
+            const QsLogging::Level level = static_cast<QsLogging::Level>(action->data().toInt());
+            QLOG_DEBUG() << "Acquisition: setting the logging level to" << utils::loggingLevelName(level);
+            m_settings->setLoggingLevel(level);
+            return;
+        };
+    };
+    QLOG_WARN() << "Acquisition: unable to set the logging level";
+}
+
+void Acquisition::refreshCharacterIndex()
+{
+    QLOG_DEBUG() << "Acquisition: refreshing character index";
+};
+
+void Acquisition::refreshStashIndex()
+{
+    QLOG_DEBUG() << "Acquisition: refreshing stash index";
+};
+
+void Acquisition::refreshAllIndexes()
+{
+    QLOG_DEBUG() << "Acquisition: refreshing character and stash indexes";
+};
+
+void Acquisition::refreshCharacters()
+{
+    QLOG_DEBUG() << "Acquisition: refreshing characters";
+};
+
+void Acquisition::refreshStashes()
+{
+    QLOG_DEBUG() << "Acquisition: refreshing stashes";
+};
+
+void Acquisition::refreshCharactersAndStashes()
+{
+    QLOG_DEBUG() << "Acquisition: refreshing characters and stashes";
+};
+
+void Acquisition::refreshEverything()
+{
+    QLOG_DEBUG() << "Acquisition: refreshing everything";
+};
 
 void Acquisition::getLeagues()
 {
@@ -200,15 +288,22 @@ void Acquisition::getLeagues()
     auto* reply = m_rate_limiter->Submit("GET_LEAGUES", request);
     connect(reply, &RateLimitedReply::finished, this,
         [this](QNetworkReply* reply) {
+            QString current_league = m_settings->league();
             const auto data = reply->readAll();
-            auto payload = utils::parse_json<poe_api::LeagueListWrapper>(data);
-            const QString current_league_id = m_settings->league();
+            const auto payload = utils::parse_json<poe_api::LeagueListWrapper>(data);
+            if (current_league.isEmpty()) {
+                current_league = (*payload->leagues).front()->id;
+                m_settings->setLeague(current_league);
+            };
             m_league_actions.clear();
             m_league_actions.reserve(payload->leagues->size());
             for (const auto& league : *payload->leagues) {
-                QAction* action = new QAction(league->id, this);
+                const QString display_name = utils::leaguePrettyName(league->id);
+                QAction* action = new QAction(display_name, this);
                 action->setCheckable(true);
-                action->setChecked(league->id == current_league_id);
+                action->setChecked(league->id == current_league);
+                action->setData(league->id);
+                connect(action, &QAction::triggered, this, &Acquisition::setLeague);
                 m_league_actions.append(action);
             };
             emit leagueListChanged();
@@ -223,7 +318,7 @@ void Acquisition::listCharacters()
     auto* reply = m_rate_limiter->Submit("LIST_CHARACTERS", request);
     connect(reply, &RateLimitedReply::finished, this,
         [](QNetworkReply* reply) {
-            auto payload = utils::parse_json<poe_api::CharacterListWrapper>(reply->readAll());
+            const auto payload = utils::parse_json<poe_api::CharacterListWrapper>(reply->readAll());
             reply->deleteLater();
         });
 }

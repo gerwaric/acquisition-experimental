@@ -3,9 +3,11 @@
 #include <acquisition/api_types/character.h>
 #include <acquisition/api_types/league.h>
 #include <acquisition/api_types/stash_tab.h>
+#include <acquisition/data_model/tree_model.h>
 #include <acquisition/oauth/oauth_settings.h>
 #include <acquisition/oauth/oauth_token.h>
-#include <acquisition/data_model/tree_model.h>
+#include <acquisition/settings.h>
+#include <acquisition/search_filters.h>
 
 #include <QObject>
 #include <QQmlEngine>
@@ -26,8 +28,6 @@ class RateLimiter;
 class Settings;
 class UserDataStore;
 
-#include <acquisition/settings.h>
-
 class Acquisition : public QObject
 {
     Q_OBJECT
@@ -35,13 +35,14 @@ class Acquisition : public QObject
     Q_PROPERTY(QList<QAction*> refreshActions MEMBER m_refresh_actions CONSTANT)
     Q_PROPERTY(QList<QAction*> loggingActions MEMBER m_logging_actions CONSTANT)
     Q_PROPERTY(QAbstractItemModel* treeModel READ treeModel NOTIFY treeModelChanged)
+    Q_PROPERTY(SearchFilters* searchFilters MEMBER m_search_filters CONSTANT)
     QML_ELEMENT
     QML_SINGLETON
 
 public:
     Acquisition(QObject* parent = nullptr);
 
-    void init(const QString& directory);
+    void setDataDirectory(const QString& directory);
 
     QAbstractItemModel* treeModel() { return m_tree_model; };
 
@@ -58,6 +59,20 @@ public slots:
     void restoreDefaultLogLevel();
     void onAccessGranted(const OAuthToken& token);
 
+    void refreshCharacterIndex();
+    void refreshStashIndex();
+    void refreshAllIndexes();
+    void refreshCharacters();
+    void refreshStashes();
+    void refreshCharactersAndStashes();
+    void refreshEverything();
+
+private:
+    void loadSettings();
+    void initLeagueActions();
+    void initRefreshActions();
+    void initLoggingActions();
+
     void getLeagues();
     void listCharacters();
     void getCharacter(
@@ -69,16 +84,10 @@ public slots:
         const QString& stash_id,
         const QString& substash_id = "");
 
-private:
-    void loadSettings();
-    void initLeagueMenu();
-    void initRefreshMenu();
-    void initLoggingMenu();
+    void setLeague();
+    void setLoggingLevel();
 
     QStringList m_logging_levels;
-    void loggingLevelChanged(int index);
-
-    void setLoggingLevel(QsLogging::Level level);
 
     static const OAuthSettings s_oauth_settings;
 
@@ -87,6 +96,7 @@ private:
     OAuthManager* m_oauth_manager{ nullptr };
     RateLimiter* m_rate_limiter{ nullptr };
     TreeModel* m_tree_model{ nullptr };
+    SearchFilters* m_search_filters;
 
     QString m_data_directory;
     Settings* m_settings{ nullptr };
@@ -99,5 +109,4 @@ private:
 
     std::vector<std::shared_ptr<poe_api::Character>> m_characters;
     std::vector<std::shared_ptr<poe_api::StashTab>> m_stashes;
-
 };

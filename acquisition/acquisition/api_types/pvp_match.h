@@ -1,9 +1,8 @@
 #pragma once
 
-#include <acquisition/json_struct/json_struct.h>
+#include <acquisition/utils/json_struct_qt.h>
 
 #include <optional>
-#include <string>
 
 namespace poe_api{
 
@@ -11,16 +10,16 @@ namespace poe_api{
 
     struct PvPMatch {
 
-        std::string id; // string the match's name
-        std::optional<std::string> realm; // ? string pc, xbox, or sony
-        std::optional<std::string> startAt; // ? string date time(ISO8601)
-        std::optional<std::string> endAt; // ? string date time(ISO8601)
-        std::optional<std::string> url; // ? string a url link to a Path of Exile forum thread
-        std::string description; // string
+        QString id; // string the match's name
+        std::optional<QString> realm; // ? string pc, xbox, or sony
+        std::optional<QString> startAt; // ? string date time(ISO8601)
+        std::optional<QString> endAt; // ? string date time(ISO8601)
+        std::optional<QString> url; // ? string a url link to a Path of Exile forum thread
+        QString description; // string
         bool glickoRatings; // bool
         bool pvp; // bool always true
-        std::string style; // string Blitz, Swiss, or Arena
-        std::optional<std::string> registerAt; // ? string date time(ISO8601)
+        QString style; // string Blitz, Swiss, or Arena
+        std::optional<QString> registerAt; // ? string date time(ISO8601)
         std::optional<bool>complete; // ? bool always true if present
         std::optional<bool>upcoming; // ? bool always true if present
         std::optional<bool> inProgress; // ? bool always true if present

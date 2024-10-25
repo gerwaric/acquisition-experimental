@@ -1,11 +1,10 @@
 #pragma once
 
+#include <acquisition/utils/json_struct_qt.h>
+
 #include <acquisition/api_types/account.h>
 
-#include <json_struct/json_struct.h>
-
 #include <optional>
-#include <string>
 
 namespace poe_api{
 
@@ -14,11 +13,11 @@ namespace poe_api{
     struct PvPLadderTeamMember {
 
         struct Character {
-            std::string id; // string a unique 64 digit hexadecimal string
-            std::string name; // string
+            QString id; // string a unique 64 digit hexadecimal string
+            QString name; // string
             unsigned level; // uint
-            std::string class_; // string
-            std::optional<std::string> league; // ? string
+            QString class_; // string
+            std::optional<QString> league; // ? string
             std::optional<unsigned> score; // ? uint count of league objective completions
             
             JS_OBJECT(

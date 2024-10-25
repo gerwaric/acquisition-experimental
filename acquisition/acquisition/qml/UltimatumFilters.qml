@@ -16,15 +16,15 @@ ColumnLayout {
         visible: false
 
         Label { text: "Challenge Type" }
-        ComboBox { model: SearchFilters.ultimatumChallengeTypes }
+        ComboBox { model: Acquisition.searchFilters.ultimatumChallengeTypes }
 
         Label { text: "Reward Type" }
-        ComboBox { model: SearchFilters.ultimatumRewardTypes }
+        ComboBox { model: Acquisition.searchFilters.ultimatumRewardTypes }
 
         Label { text: "Required Item" }
-        ComboBox { model: SearchFilters.ultimatumRequiredItems }
+        ComboBox { model: Acquisition.searchFilters.ultimatumRequiredItems }
 
         Label { text: "Reward Unique" }
-        ComboBox { model: SearchFilters.ultimatumRewardUniques }
+        ComboBox { model: Acquisition.searchFilters.ultimatumRewardUniques }
     }
 }

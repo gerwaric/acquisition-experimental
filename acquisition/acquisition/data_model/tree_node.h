@@ -9,8 +9,12 @@
 
 class TreeNode {
 public:
-    explicit TreeNode(const QString& name = "", TreeNode* parent = nullptr)
+
+    enum class NodeType { Root, Character, Stash, Item };
+
+    explicit TreeNode(NodeType type = NodeType::Root, const QString& name = "", TreeNode* parent = nullptr)
         : m_id(s_node_count++)
+        , m_type(type)
         , m_name(name)
         , m_parent(parent) {};
 
@@ -37,11 +41,11 @@ public:
         return m_parent ? m_parent->rowOfChild(this) : 0;
     };
 
-    virtual int columnCount() const {
+    virtual inline int columnCount() const {
         return 1;
     };
      
-    virtual QVariant data(int column) const {
+    virtual inline QVariant data(int column) const {
         return (column == 0) ? m_name : "";
     };
 
@@ -61,6 +65,10 @@ public:
         };
     };
 
+    inline NodeType type() const {
+        return m_type;
+    };
+
 private:
 
     inline int rowOfChild(const TreeNode* child) const {
@@ -73,6 +81,7 @@ private:
     };
 
     const long unsigned m_id;
+    const NodeType m_type;
     const QString m_name;
     const TreeNode* m_parent;
     std::vector<std::unique_ptr<TreeNode>> m_children;
