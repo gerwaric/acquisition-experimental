@@ -1,5 +1,8 @@
 #pragma once
 
+#include <acquisition/api_types/character.h>
+#include <acquisition/api_types/stash_tab.h>
+
 #include <QsLog/QsLog.h>
 
 #include <QString>
@@ -12,7 +15,7 @@ public:
 
     enum class NodeType { Root, Character, Stash, Item };
 
-    explicit TreeNode(NodeType type = NodeType::Root, const QString& name = "", TreeNode* parent = nullptr)
+    explicit TreeNode(NodeType type, const QString& name, TreeNode* parent)
         : m_id(s_node_count++)
         , m_type(type)
         , m_name(name)

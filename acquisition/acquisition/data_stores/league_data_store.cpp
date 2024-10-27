@@ -151,7 +151,7 @@ QStringList LeagueDataStore::getStashList()
     return stash_ids;
 }
 
-std::shared_ptr<poe_api::Character> LeagueDataStore::getCharacter(const QString& id)
+std::unique_ptr<poe_api::Character> LeagueDataStore::getCharacter(const QString& id)
 {
     if (!m_db.isOpen()) {
         QLOG_ERROR() << "Cannot get character: the database is not open";
@@ -171,16 +171,16 @@ std::shared_ptr<poe_api::Character> LeagueDataStore::getCharacter(const QString&
         return nullptr;
     };
 
-    auto character = std::make_shared<poe_api::Character>();
+    auto character = std::make_unique<poe_api::Character>();
     const std::string bytes = query.value(0).toString().toStdString(); //query.value(0).toString().toStdString();
     JS::ParseContext parseContext(bytes);
     if (parseContext.parseTo(character) != JS::Error::NoError) {
         QLOG_ERROR() << "Error parsing character:" << parseContext.makeErrorString();
     };
-    return character;
+    return std::move(character);
 }
 
-std::shared_ptr<poe_api::StashTab> LeagueDataStore::getStash(const QString& id)
+std::unique_ptr<poe_api::StashTab> LeagueDataStore::getStash(const QString& id)
 {
     if (!m_db.isOpen()) {
         QLOG_ERROR() << "Cannot get stash: the database is not open";
@@ -200,39 +200,41 @@ std::shared_ptr<poe_api::StashTab> LeagueDataStore::getStash(const QString& id)
         return nullptr;
     };
 
-    auto stash_tab = std::make_shared<poe_api::StashTab>();
+    auto stash_tab = std::make_unique<poe_api::StashTab>();
     const std::string bytes = query.value(0).toString().toStdString();
     JS::ParseContext parseContext(bytes);
     if (parseContext.parseTo(stash_tab) != JS::Error::NoError) {
         QLOG_ERROR() << "Error parsing character:" << parseContext.makeErrorString();
     };
-    return stash_tab;
+    return std::move(stash_tab);
 }
 
-std::vector<std::shared_ptr<poe_api::Character>> LeagueDataStore::getCharacters()
+std::unique_ptr<poe_api::CharacterList> LeagueDataStore::getCharacters()
 {
-    std::vector<std::shared_ptr<poe_api::Character>> characters;
-    for (const auto& id : getCharacterList()) {
-        auto character = getCharacter(id);
+    const QStringList character_names = getCharacterList();
+    std::unique_ptr<poe_api::CharacterList> characters;
+    characters->reserve(character_names.size());
+    for (const auto& name : character_names) {
+        auto character = getCharacter(name);
         if (character) {
-            characters.push_back(character);
+            characters->push_back(std::move(character));
         };
     };
-    return characters;
+    return std::move(characters);
 }
 
-std::vector<std::shared_ptr<poe_api::StashTab>> LeagueDataStore::getStashes()
+std::unique_ptr<poe_api::StashTabList> LeagueDataStore::getStashes()
 {
     const QStringList stash_ids = getStashList();
-    std::vector<std::shared_ptr<poe_api::StashTab>> stashes;
-    stashes.reserve(stash_ids.size());
+    std::unique_ptr<poe_api::StashTabList> stashes;
+    stashes->reserve(stash_ids.size());
     for (const auto& id : stash_ids) {
         auto stash = getStash(id);
         if (stash) {
-            stashes.push_back(stash);
+            stashes->push_back(std::move(stash));
         };
     };
-    return stashes;
+    return std::move(stashes);
 }
 
 void LeagueDataStore::storeCharacter(const poe_api::Character& character)

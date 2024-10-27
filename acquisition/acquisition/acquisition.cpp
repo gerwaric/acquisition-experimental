@@ -1,12 +1,14 @@
 #include <acquisition/acquisition.h>
 
 #include <acquisition/api_types/character.h>
+#include <acquisition/api_types/item.h>
 #include <acquisition/api_types/league.h>
 #include <acquisition/api_types/stash_tab.h>
 #include <acquisition/constants.h>
 #include <acquisition/data_stores/league_data_store.h>
 #include <acquisition/data_stores/user_data_store.h>
 #include <acquisition/oauth/oauth_manager.h>
+#include <acquisition/oauth/oauth_settings.h>
 #include <acquisition/rate_limit/rate_limiter.h>
 #include <acquisition/settings.h>
 #include <acquisition/utils/command_line.h>
@@ -19,15 +21,6 @@
 
 #define SERVER_ENDPOINT "https://api.pathofexile.com"
 
-const OAuthSettings Acquisition::s_oauth_settings = {
-    "https://www.pathofexile.com/oauth/authorize",
-    "https://www.pathofexile.com/oauth/token",
-    "acquisition",
-    "account:leagues account:stashes account:characters",
-    "http://127.0.0.1",
-    "/auth/path-of-exile"
-};
-
 Acquisition::Acquisition(QObject* parent) : QObject(parent)
 {
     const QString banner_text("- Starting " APP_NAME " version " APP_VERSION_STRING " -");
@@ -37,11 +30,22 @@ Acquisition::Acquisition(QObject* parent) : QObject(parent)
     QLOG_INFO() << banner_text;
     QLOG_INFO() << banner_line;
 
+    OAuthSettings oauth;
+    oauth.authorization_url = "https://www.pathofexile.com/oauth/authorize";
+    oauth.token_url = "https://www.pathofexile.com/oauth/token";
+    oauth.client_id = "acquisition";
+    oauth.client_scope = "account:leagues account:stashes account:characters";
+    oauth.redirect_url = "http://127.0.0.1";
+    oauth.redirect_path = "/auth/path-of-exile";
+
     m_network_manager = new QNetworkAccessManager(this);
-    m_oauth_manager = new OAuthManager(*m_network_manager, s_oauth_settings, this);
+    m_oauth_manager = new OAuthManager(*m_network_manager, oauth, this);
     m_rate_limiter = new RateLimiter(*m_network_manager, this);
     m_tree_model = new TreeModel(this);
+    m_proxy_model = new ProxyModel(this);
     m_search_filters = new SearchFilters(this);
+
+    m_proxy_model->setSourceModel(m_tree_model);
 
     connect(m_oauth_manager, &OAuthManager::accessGranted, this, &Acquisition::onAccessGranted);
 }
@@ -55,7 +59,6 @@ void Acquisition::setDataDirectory(const QString& directory)
 
     loadSettings();
     initLeagueActions();
-    initRefreshActions();
     initLoggingActions();
 }
 
@@ -86,22 +89,22 @@ void Acquisition::loadSettings()
     };
 
     m_characters = m_league_data->getCharacters();
-    QLOG_DEBUG() << "Acquisition: loading" << m_characters.size() << "stored characters";
-    for (size_t i = 0; i < m_characters.size(); ++i) {
-        auto character = m_characters[i];
-        QLOG_TRACE() << "Acquisition: loading character" << i << "/" << m_characters.size() << character->name;
-        m_tree_model->appendCharacter(*character);
+    QLOG_DEBUG() << "Acquisition: loading" << m_characters->size() << "stored characters";
+    for (size_t i = 0; i < m_characters->size(); ++i) {
+        const poe_api::Character& character = *(*m_characters)[i];
+        QLOG_TRACE() << "Acquisition: loading character" << i << "/" << m_characters->size() << character.name;
+        m_tree_model->appendCharacter(character);
     }
 
     m_stashes = m_league_data->getStashes();
-    QLOG_DEBUG() << "Application: loading" << m_stashes.size() << "stored stashes";
-    for (size_t i = 0; i < m_stashes.size(); ++i) {
-        auto stash = m_stashes[i];
-        QLOG_TRACE() << "Application: loading stash" << i << "/" << m_stashes.size() << stash->type + ":" << stash->name;
-        m_tree_model->appendStash(*stash);
+    QLOG_DEBUG() << "Application: loading" << m_stashes->size() << "stored stashes";
+    for (size_t i = 0; i < m_stashes->size(); ++i) {
+        const poe_api::StashTab& stash = *(*m_stashes)[i];
+        QLOG_TRACE() << "Application: loading stash" << i << "/" << m_stashes->size() << stash.type + ":" << stash.name;
+        m_tree_model->appendStash(stash);
     };
 
-    emit treeModelChanged();
+    emit searchResultsChanged();
 
     OAuthToken token = m_user_data->getStruct<OAuthToken>("oauth_token");
     if (token.isValid()) {
@@ -126,40 +129,6 @@ void Acquisition::initLeagueActions()
         m_league_actions = { action };
     };
     emit leagueListChanged();
-}
-
-void Acquisition::initRefreshActions()
-{
-    QLOG_DEBUG() << "Acquisition: initializing the refresh menu actions";
-    QAction* action;
-
-    action = new QAction("Refresh Character List", this);
-    connect(action, &QAction::triggered, this, []() {});
-    m_refresh_actions.append(action);
-
-    action = new QAction("Refresh Stash List", this);
-    connect(action, &QAction::triggered, this, []() {});
-    m_refresh_actions.append(action);
-
-    action = new QAction("Refresh Character & Stash Lists", this);
-    connect(action, &QAction::triggered, this, []() {});
-    m_refresh_actions.append(action);
-
-    action = new QAction("Refresh Characters", this);
-    connect(action, &QAction::triggered, this, []() {});
-    m_refresh_actions.append(action);
-
-    action = new QAction("Refresh Stashes", this);
-    connect(action, &QAction::triggered, this, []() {});
-    m_refresh_actions.append(action);
-
-    action = new QAction("Refresh Characters & Stashes", this);
-    connect(action, &QAction::triggered, this, []() {});
-    m_refresh_actions.append(action);
-
-    action = new QAction("Refresh All", this);
-    connect(action, &QAction::triggered, this, []() {});
-    m_refresh_actions.append(action);
 }
 
 void Acquisition::initLoggingActions()
@@ -277,8 +246,97 @@ void Acquisition::refreshCharactersAndStashes()
 
 void Acquisition::refreshEverything()
 {
+    QUrl url;
+    QNetworkRequest request;
+    RateLimitedReply* reply;
+
     QLOG_DEBUG() << "Acquisition: refreshing everything";
+    url = QUrl(SERVER_ENDPOINT "/character");
+    request = QNetworkRequest(url);
+    QLOG_TRACE() << "Acquisition: requesting character list";
+    reply = m_rate_limiter->Submit("LIST_CHARACTERS", request);
+    connect(reply, &RateLimitedReply::finished, this, &Acquisition::refreshEverything_characterListReceived);
+
+    const QString league = m_settings->league();
+    QLOG_TRACE() << "Acquisition: listing stashes for" << league;
+    url = QUrl(SERVER_ENDPOINT "/stash/" + league);
+    request = QNetworkRequest(url);
+    reply = m_rate_limiter->Submit("LIST_STASHES", request);
+    connect(reply, &RateLimitedReply::finished, this, &Acquisition::refreshEverything_stashListReceived);
 };
+
+void Acquisition::refreshEverything_characterListReceived(QNetworkReply* reply)
+{
+    QLOG_TRACE() << "Acquisition: received character list";
+    const QString league = m_settings->league();
+    const auto payload = utils::parse_json<poe_api::CharacterListWrapper>(reply->readAll());
+    reply->deleteLater();
+    m_characters = std::move(payload->characters);
+
+    QStringList names;
+    for (const auto& character : *m_characters) {
+        if (m_settings->league() == character->league.value_or("")) {
+            names.append(character->name);
+        };
+    };
+
+    QLOG_TRACE() << "Acquisition: requesting" << names.size() << "characters in" << league;
+    for (int i = 0; i < names.size(); ++i) {
+        const QString& name = names[i];
+        QLOG_TRACE() << "Acquisition: requesting character" << i << "of" << names.size() << ":" << name;
+        const QUrl url(SERVER_ENDPOINT "/character/" + name);
+        const QNetworkRequest request(url);
+        auto* reply = m_rate_limiter->Submit("GET_CHARACTER", request);
+        connect(reply, &RateLimitedReply::finished, this, &Acquisition::refreshEverything_characterReceived);
+    };
+};
+
+void Acquisition::refreshEverything_characterReceived(QNetworkReply* reply)
+{
+    auto payload = utils::parse_json<poe_api::CharacterWrapper>(reply->readAll());
+    reply->deleteLater();
+    m_league_data->storeCharacter(*payload->character);
+    for (auto& character : *m_characters) {
+        if (character->name == payload->character->name) {
+            character = std::move(payload->character);
+        };
+    };
+};
+
+void Acquisition::refreshEverything_stashListReceived(QNetworkReply* reply)
+{
+    const QString league = m_settings->league();
+    const auto payload = utils::parse_json<poe_api::StashListWrapper>(reply->readAll());
+    reply->deleteLater();
+    m_stashes = std::move(payload->stashes);
+
+    for (size_t i = 0; i < m_stashes->size(); ++i) {
+        const poe_api::StashTab& stash = *(*m_stashes)[i];
+        if (stash.parent) {
+
+        };'
+        const QString& stash_id = stash.id;
+        //const QString& substash_id = stash.parent;
+        QLOG_TRACE() << "Acquisition: getting stash" << i << "of" << m_stashes->size() << "in" << league + ":" << stash_id << substash_id;
+        const QString stash_location = stash_id + ((substash_id.isEmpty()) ? "" : "/" + substash_id);
+        const QUrl url(SERVER_ENDPOINT "/stash/" + league + "/" + stash_location);
+        const QNetworkRequest request(url);
+        auto* reply = m_rate_limiter->Submit("GET_STASH", request);
+        connect(reply, &RateLimitedReply::finished, this, [](){});
+    };
+};
+
+void Acquisition::refreshEverything_stashReceived(QNetworkReply* reply)
+{
+    auto payload = utils::parse_json<poe_api::StashWrapper>(reply->readAll());
+    reply->deleteLater();
+    for (auto& stash : *m_stashes) {
+        if (stash->id == payload->stash->id) {
+            stash = std::move(payload->stash);
+        };
+    };
+};
+
 
 void Acquisition::getLeagues()
 {
@@ -368,3 +426,22 @@ void Acquisition::getStash(
         });
 }
 
+void Acquisition::setMinLevel(double value)
+{
+    if (std::isnan(value)) {
+        m_proxy_model->removeFilter("MIN_LEVEL");
+    } else {
+        m_proxy_model->setFilter("MIN_LEVEL",
+            [value](const poe_api::Item& item) {
+                if (!item.requirements) {
+                    return true;
+                };
+                //auto& requirements = item.requirements.value();
+            });
+    };
+}
+
+void Acquisition::setMaxLevel(double  value)
+{
+
+}

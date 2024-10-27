@@ -18,10 +18,20 @@ namespace poe_api {
 
     struct Item {
 
+        struct Influences {
+            std::optional<bool> shaper;
+            std::optional<bool> elder;
+            std::optional<bool> crusader;
+            std::optional<bool> redeemer;
+            std::optional<bool> hunter;
+            std::optional<bool> warlord;
+            JS_OBJ(shaper, elder, crusader, redeemer, hunter, warlord);
+        };
+
         struct Rewards {
             QString label; // string
-            // TBD std::unordered_map<int, QString> rewards; // dictionary of int the key is a string representing the type of reward.The value is the amount
-            JS_OBJ(label /*, rewards */);
+            std::unordered_map<QString, QString> rewards; // dictionary of int the key is a string representing the type of reward.The value is the amount
+            JS_OBJ(label, rewards);
         };
 
         struct LogbookFaction {
@@ -92,7 +102,7 @@ namespace poe_api {
         std::optional<QString> stackSizeText; // ? string
         std::optional<QString> league; // ? string
         std::optional<QString> id; // ? string a unique 64 digit hexadecimal string
-        // TBD std::optional<poe_api::Item::Influences> influences; // ? object
+        std::optional<poe_api::Item::Influences> influences; // ? object
         std::optional<bool> elder; // ? bool always true if present
         std::optional<bool> shaper; // ? bool always true if present
         std::optional<bool> searing; // ? bool always true if present
@@ -143,8 +153,9 @@ namespace poe_api {
         std::optional<std::vector<QString>> veiledMods; // ? array of string random video identifier
         std::optional<bool> veiled; // ? bool always true if present
         std::optional<QString> descrText; // ? string
-        std::optional<std::vector<QString>> flavourText; // ? array of string
-        // TBD flavourTextParsed; // ? array of string or object
+        std::optional<std::vector<QString>> flavourText; // ? array of
+        // WARNING: flavourTextParsed might sometimes be an object
+        //std::optional<std::vector<QString>> flavourTextParsed; // ? array of string or object
         std::optional<std::vector<QString>> flavourTextNote; // ? string user - generated text
         std::optional<std::vector<QString>> prophecyText; // ? string
         std::optional<bool> isRelic; // ? bool always true if present
@@ -167,7 +178,7 @@ namespace poe_api {
 
         JS_OBJ(
             verified, w, h, icon, support,
-            stackSize, maxStackSize, stackSizeText, league, id, /* influences, */
+            stackSize, maxStackSize, stackSizeText, league, id, influences,
             elder, shaper, searing, tangled, abyssJewel, delve, fractured, synthesised,
             sockets, socketedItems,
             name, typeLine, baseType, rarity, identified, itemLevel, ilvl, note, forum_note,

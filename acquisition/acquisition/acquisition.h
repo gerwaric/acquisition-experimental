@@ -4,8 +4,8 @@
 #include <acquisition/api_types/league.h>
 #include <acquisition/api_types/stash_tab.h>
 #include <acquisition/data_model/tree_model.h>
-#include <acquisition/oauth/oauth_settings.h>
 #include <acquisition/oauth/oauth_token.h>
+#include <acquisition/proxy_model.h>
 #include <acquisition/settings.h>
 #include <acquisition/search_filters.h>
 
@@ -15,6 +15,7 @@
 #include <QAbstractItemModel>
 #include <QAction>
 #include <QList>
+#include <QSortFilterProxyModel>
 #include <QString>
 #include <QStringList>
 
@@ -32,9 +33,9 @@ class Acquisition : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QList<QAction*> leagueActions MEMBER m_league_actions NOTIFY leagueListChanged)
-    Q_PROPERTY(QList<QAction*> refreshActions MEMBER m_refresh_actions CONSTANT)
     Q_PROPERTY(QList<QAction*> loggingActions MEMBER m_logging_actions CONSTANT)
     Q_PROPERTY(QAbstractItemModel* treeModel READ treeModel NOTIFY treeModelChanged)
+    Q_PROPERTY(QSortFilterProxyModel* searchResultsModel READ searchResultsModel NOTIFY searchResultsChanged)
     Q_PROPERTY(SearchFilters* searchFilters MEMBER m_search_filters CONSTANT)
     QML_ELEMENT
     QML_SINGLETON
@@ -45,6 +46,7 @@ public:
     void setDataDirectory(const QString& directory);
 
     QAbstractItemModel* treeModel() { return m_tree_model; };
+    QSortFilterProxyModel* searchResultsModel() { return m_proxy_model; };
 
     static QString makeLogFilename(const QString& directory);
 
@@ -52,6 +54,7 @@ signals:
     void leagueListChanged();
     void leagueChanged();
     void treeModelChanged();
+    void searchResultsChanged();
 
 public slots:
     void authenticate();
@@ -65,12 +68,19 @@ public slots:
     void refreshCharacters();
     void refreshStashes();
     void refreshCharactersAndStashes();
+
     void refreshEverything();
+    void refreshEverything_characterListReceived(QNetworkReply* reply);
+    void refreshEverything_characterReceived(QNetworkReply* reply);
+    void refreshEverything_stashListReceived(QNetworkReply* reply);
+    void refreshEverything_stashReceived(QNetworkReply* reply);
+
+    void setMinLevel(double value);
+    void setMaxLevel(double value);
 
 private:
     void loadSettings();
     void initLeagueActions();
-    void initRefreshActions();
     void initLoggingActions();
 
     void getLeagues();
@@ -89,14 +99,13 @@ private:
 
     QStringList m_logging_levels;
 
-    static const OAuthSettings s_oauth_settings;
-
-    QNetworkAccessManager* m_network_manager;
+    QNetworkAccessManager* m_network_manager{ nullptr };
 
     OAuthManager* m_oauth_manager{ nullptr };
     RateLimiter* m_rate_limiter{ nullptr };
     TreeModel* m_tree_model{ nullptr };
-    SearchFilters* m_search_filters;
+    ProxyModel* m_proxy_model{ nullptr };
+    SearchFilters* m_search_filters{ nullptr };
 
     QString m_data_directory;
     Settings* m_settings{ nullptr };
@@ -107,6 +116,6 @@ private:
     QList<QAction*> m_refresh_actions;
     QList<QAction*> m_logging_actions;
 
-    std::vector<std::shared_ptr<poe_api::Character>> m_characters;
-    std::vector<std::shared_ptr<poe_api::StashTab>> m_stashes;
+    std::unique_ptr<poe_api::CharacterList> m_characters;
+    std::unique_ptr<poe_api::StashTabList> m_stashes;
 };

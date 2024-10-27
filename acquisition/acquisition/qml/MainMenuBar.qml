@@ -39,7 +39,7 @@ MenuBar {
             onTriggered: Acquisition.refreshCharacterIndex()
         }
         Action {
-            text: "Update the Character and Stash indexes"
+            text: "Update both indexes"
             onTriggered: Acquisition.refreshAllIndexes()
         }
 
@@ -54,14 +54,14 @@ MenuBar {
             onTriggered: Acquisition.refreshCharacters()
         }
         Action {
-            text: "Refresh Characters and Stashes"
+            text: "Refresh both"
             onTriggered: Acquisition.refreshCharactersAndStashes()
         }
 
         MenuSeparator {}
 
         Action {
-            text: "Refresh *Everything*"
+            text: "Refresh Everything"
             onTriggered: Acquisition.refreshEverything()
         }
     }

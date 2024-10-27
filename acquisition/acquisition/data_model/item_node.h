@@ -22,9 +22,6 @@ public:
 
     const poe_api::Item& item() const { return m_item; };
 
-    enum class ItemType { None, Equipable, Stackable, Other };
-
 private:
     const poe_api::Item& m_item;
-    const ItemType m_type{ ItemType::None };
 };

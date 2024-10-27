@@ -1,8 +1,12 @@
 target_sources(acquisition PRIVATE
     "character_node.cpp"
     "character_node.h"
+    "item_info.cpp"
+    "item_info.h"
     "item_node.cpp"
     "item_node.h"
+    "root_node.cpp"
+    "root_node.h"
     "stash_node.cpp"
     "stash_node.h"
     "tree_model.cpp"

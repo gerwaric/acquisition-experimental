@@ -1,6 +1,7 @@
 #include <acquisition/data_model/character_node.h>
 
 #include <acquisition/data_model/item_node.h>
+#include <acquisition/data_model/root_node.h>
 
 #include <QsLog/QsLog.h>
 
@@ -26,5 +27,5 @@ CharacterNode::CharacterNode(const poe_api::Character& character, TreeNode* pare
 
 void CharacterNode::addCollection(const QString& name, const std::vector<poe_api::Item>& items)
 {
-    addChild<TreeNode>(name).addChildren<ItemNode>(items);
+    addChild<RootNode>(name).addChildren<ItemNode>(items);
 }

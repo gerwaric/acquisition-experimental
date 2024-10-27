@@ -1,7 +1,16 @@
 #pragma once
 
+#include <acquisition/api_types/item.h>
+
 #include <QObject>
 #include <QQmlEngine>
+
+using FilterFunction = std::function<bool(const poe_api::Item& item)>;
+
+class SearchFilter {
+
+
+};
 
 class SearchFilters : public QObject {
     Q_OBJECT
@@ -21,6 +30,7 @@ class SearchFilters : public QObject {
 
 public:
     SearchFilters(QObject* parent = nullptr);
+
 
     enum class Type {
         Category,
@@ -172,6 +182,7 @@ public:
     Q_ENUM(Miscellaneous)
 
 private:
+
     QStringList m_item_categories;
     QStringList m_item_rarities;
     QStringList m_character_classes;

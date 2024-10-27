@@ -3,7 +3,7 @@
 #include <acquisition/api_types/character.h>
 #include <acquisition/api_types/item.h>
 #include <acquisition/api_types/stash_tab.h>
-#include <acquisition/data_model/tree_node.h>
+#include <acquisition/data_model/root_node.h>
 
 #include <QsLog/QsLog.h>
 
@@ -33,9 +33,7 @@ public:
     
     // Returns the data stored under the given role for the item referred to by the index.
     inline QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override {
-        return (index.isValid() && (role == Qt::DisplayRole))
-            ? getNode(index)->data(index.column())
-            : QVariant();
+        return (index.isValid() && (role == Qt::DisplayRole)) ? getNode(index)->data(index.column()) : QVariant();
     };
 
     inline bool hasChildren(const QModelIndex &parent = QModelIndex()) const override {
@@ -53,8 +51,7 @@ public:
     };
 
 private:
-
-    TreeNode m_root;
+    RootNode m_root;
     TreeNode& m_character_root;
     TreeNode& m_stash_root;
 };

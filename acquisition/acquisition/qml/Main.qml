@@ -70,7 +70,7 @@ ApplicationWindow {
                 ScrollBar.horizontal: ScrollBar {}
                 ScrollBar.vertical: ScrollBar {}
 
-                model: Acquisition.treeModel
+                model: Acquisition.searchResultsModel
 
                 delegate: TreeViewDelegate {
                     id: itemViewDelegate

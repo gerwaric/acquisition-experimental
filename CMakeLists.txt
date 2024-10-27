@@ -17,9 +17,7 @@ if(MSVC)
     add_compile_options(/W4)
 endif()
 
-#find_package(Qt6 REQUIRED COMPONENTS HttpServer Network NetworkAuth Sql Widgets)
-#find_package(Qt6 REQUIRED COMPONENTS HttpServer Network NetworkAuth Quick Sql)
-find_package(Qt6 REQUIRED COMPONENTS HttpServer Network Quick Sql)
+find_package(Qt6 REQUIRED COMPONENTS HttpServer Network NetworkAuth Quick Sql)
 
 qt_standard_project_setup(REQUIRES 6.8)
 
@@ -29,43 +27,17 @@ set_target_properties(acquisition PROPERTIES
     QT_QMLCACHEGEN_ARGUMENTS "--verbose"
 )
 
-#[[
-qt_add_qml_module(acquisition
-    URI MyAcquisition
-    VERSION 1.0
-    QML_FILES
-        #ActionListMenu.qml
-        #ArmourFilters.qml
-        #AutoComplete.qml
-        #FilterSectionHeader.qml
-        #HeistFilters.qml
-        acquisition/acquisition/qml/Main.qml
-        #MainMenuBar.qml
-        #MapFilters.qml
-        #MiscellaneousFilters.qml
-        #RequirementFilters.qml
-        #SearchFilterGroup.qml
-        #SanctumFilters.qml
-        #SocketFilters.qml
-        #TypeFilters.qml
-        #UltimatumFilters.qml
-        #WeaponFilters.qml
-)
-#]]
-
 add_subdirectory(acquisition)
 add_subdirectory(external/boost-headers-only)
 add_subdirectory(external/json_struct)
 add_subdirectory(external/QsLog)
-add_subdirectory(external/oauth)
 
 target_link_libraries(acquisition PRIVATE
     Qt6::HttpServer
     Qt6::Network
-    #Qt6::NetworkAuth
+    Qt6::NetworkAuth
     Qt6::Quick
     Qt6::Sql
-    #Qt6::Widgets
     boost-headers-only
     json_struct
     QsLog

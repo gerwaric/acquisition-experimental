@@ -20,11 +20,11 @@ public:
     QStringList getCharacterList();
     QStringList getStashList();
 
-    std::shared_ptr<poe_api::Character> getCharacter(const QString& character_id);
-    std::shared_ptr<poe_api::StashTab> getStash(const QString& stash_id);
+    std::unique_ptr<poe_api::Character> getCharacter(const QString& character_id);
+    std::unique_ptr<poe_api::StashTab> getStash(const QString& stash_id);
 
-    std::vector<std::shared_ptr<poe_api::Character>> getCharacters();
-    std::vector<std::shared_ptr<poe_api::StashTab>> getStashes();
+    std::unique_ptr<poe_api::CharacterList> getCharacters();
+    std::unique_ptr<poe_api::StashTabList> getStashes();
 
     void storeCharacter(const poe_api::Character& character);
     void storeStash(const poe_api::StashTab& stash_tab);

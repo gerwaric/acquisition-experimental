@@ -7,8 +7,8 @@
 TreeModel::TreeModel(QObject* parent)
     : QAbstractItemModel(parent)
     , m_root("Root")
-    , m_character_root(m_root.addChild<TreeNode>("Characters"))
-    , m_stash_root(m_root.addChild<TreeNode>("Stash Tabs")) {}
+    , m_character_root(m_root.addChild<RootNode>("Characters"))
+    , m_stash_root(m_root.addChild<RootNode>("Stash Tabs")) {}
 
 QModelIndex TreeModel::index(int row, int column, const QModelIndex& parent) const
 {
