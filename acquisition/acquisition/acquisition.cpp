@@ -312,11 +312,8 @@ void Acquisition::refreshEverything_stashListReceived(QNetworkReply* reply)
 
     for (size_t i = 0; i < m_stashes->size(); ++i) {
         const poe_api::StashTab& stash = *(*m_stashes)[i];
-        if (stash.parent) {
-
-        };'
-        const QString& stash_id = stash.id;
-        //const QString& substash_id = stash.parent;
+        const QString stash_id = (stash.parent) ? stash.parent.value() : stash.id;
+        const QString substash_id = (stash.parent) ? stash.id : "";
         QLOG_TRACE() << "Acquisition: getting stash" << i << "of" << m_stashes->size() << "in" << league + ":" << stash_id << substash_id;
         const QString stash_location = stash_id + ((substash_id.isEmpty()) ? "" : "/" + substash_id);
         const QUrl url(SERVER_ENDPOINT "/stash/" + league + "/" + stash_location);
