@@ -3,8 +3,8 @@
 #include <acquisition/api_types/passive_group.h>
 #include <acquisition/api_types/passive_node.h>
 
-#include <map>
 #include <optional>
+#include <unordered_map>
 
 namespace poe_api {
     
@@ -13,8 +13,8 @@ namespace poe_api {
     struct ItemJewelData {
 
         struct Subgraph {
-            std::map<QString, poe_api::PassiveGroup> groups; // dictionary of PassiveGroup the key is the string value of the group id
-            std::map<QString, poe_api::PassiveNode> nodes; // dictionary of PassiveNode the key is the string value of the node identifier
+            std::unordered_map<QString, poe_api::PassiveGroup> groups; // dictionary of PassiveGroup the key is the string value of the group id
+            std::unordered_map<QString, poe_api::PassiveNode> nodes; // dictionary of PassiveNode the key is the string value of the node identifier
             JS_OBJ(groups, nodes);
         };
 

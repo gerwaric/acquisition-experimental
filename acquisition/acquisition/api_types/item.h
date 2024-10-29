@@ -11,7 +11,6 @@
 #include <unordered_map>
 #include <vector>
 
-
 namespace poe_api {
 
     // https://www.pathofexile.com/developer/docs/reference#type-Item

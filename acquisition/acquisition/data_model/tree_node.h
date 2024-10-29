@@ -24,6 +24,7 @@ public:
     virtual ~TreeNode() {};
 
     inline const QString& name() const {
+        QLOG_FATAL() << "NODE:" << m_name;
         return m_name;
     };
 
@@ -32,8 +33,7 @@ public:
     };
     
     inline const TreeNode* child(int row) const {
-        return ((row >= 0) && (static_cast<size_t>(row) < m_children.size()))
-            ? m_children[row].get() : nullptr;
+        return ((row >= 0) && (static_cast<size_t>(row) < m_children.size())) ? m_children[row].get() : nullptr;
     };
     
     inline int childCount() const {

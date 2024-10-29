@@ -57,7 +57,7 @@ namespace poe_api{
         std::optional<std::vector<QString>> reminderText; // ? array of string
         std::optional<std::vector<QString>> flavourText; // ? array of string
         std::optional<unsigned> classStartIndex; // ? uint
-        std::optional<std::vector<QString>> group; // ? string the key value to look up in the groups table
+        std::optional<QString> group; // ? string the key value to look up in the groups table
         std::optional<unsigned> orbit; // ? uint the orbit this node occupies within it's group
         std::optional<unsigned> orbitIndex; // ? uint the index of this node in the group's orbit
         std::vector<QString> out; // array of string node identifiers of nodes this one connects to

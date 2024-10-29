@@ -18,7 +18,7 @@ namespace poe_api{
         std::optional<QString> proxy; // ? string identifier of the placeholder node
         std::vector<QString> nodes; // array of string the node identifiers associated with this group;
 
-        JS_OBJ(x, y, orbits, ixProxy, proxy, nodes);
+        JS_OBJ(x, y, orbits, isProxy, proxy, nodes);
     };
 
 }

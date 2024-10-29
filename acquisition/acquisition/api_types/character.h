@@ -26,7 +26,7 @@ namespace poe_api {
             std::optional<QString> pantheon_minor; // ? string one of Abberath, Gruthkul, Yugul, Shakari, Tukohama, Ralakesh, Garukhan, or Ryslatha
             std::unordered_map<QString, poe_api::ItemJewelData> jewel_data; // dictionary of ItemJewelData the key is the string value of the x property of an item from the jewels array in this request
             std::optional<QString> alternate_ascendancy; // ? string Warden, Warlock, or Primalist
-            JS_OBJ(hashes, hashes_ex, mastery_effects, skill_overrides, bandit_choice, pantheon_major, pantheon_minor, //jewel_data,
+            JS_OBJ(hashes, hashes_ex, mastery_effects, skill_overrides, bandit_choice, pantheon_major, pantheon_minor, jewel_data,
                 alternate_ascendancy);
         };
 

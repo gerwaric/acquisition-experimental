@@ -302,16 +302,20 @@ void Acquisition::updateCharacter(std::unique_ptr<poe_api::Character>& character
     auto* reply = m_rate_limiter->Submit("GET_CHARACTER", request);
     connect(reply, &RateLimitedReply::finished, this,
         [&](QNetworkReply* reply) {
+            ++m_characters_received;
             const auto bytes(reply->readAll());
             const auto payload = utils::parse_json<poe_api::CharacterWrapper>(bytes);
+
+            QLOG_FATAL().noquote() << "CHARACTER BYTES" << bytes;
+            QLOG_FATAL().noquote() << "CHARACTER VALUE" << JS::serializeStruct(payload, JS::SerializerOptions::Compact);
             reply->deleteLater();
             if (!payload->character) {
                 QLOG_ERROR() << "Acquisition: recieved empty character";
-                *character = payload->character.value();
-                m_league_data->storeCharacter(*character);
-                ++m_characters_received;
-                updateStatus();
+                return;
             };
+            *character = payload->character.value();
+            m_league_data->storeCharacter(*character);
+            updateStatus();
         });
 }
 
@@ -343,12 +347,12 @@ void Acquisition::updateStash(std::unique_ptr<poe_api::StashTab>& stash)
     auto* reply = m_rate_limiter->Submit("GET_STASH", request);
     connect(reply, &RateLimitedReply::finished, this,
         [&](QNetworkReply* reply) {
+            ++m_stashes_received;
             const auto bytes = reply->readAll();
             const auto payload = utils::parse_json<poe_api::StashWrapper>(bytes);
             reply->deleteLater();
             *stash = *payload->stash;
             m_league_data->storeStash(*stash);
-            ++m_stashes_received;
             updateStatus();
         });
 }
