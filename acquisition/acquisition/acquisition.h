@@ -19,8 +19,6 @@
 #include <QString>
 #include <QStringList>
 
-#include <vector>
-
 class QNetworkAccessManager;
 
 class LeagueDataStore;
@@ -32,6 +30,8 @@ class UserDataStore;
 class Acquisition : public QObject
 {
     Q_OBJECT
+    //Q_PROPERTY(bool authenticated MEMBER m_authenticated NETIFY authenticationStatusChanged)
+    Q_PROPERTY(QString statusText MEMBER m_status_text NOTIFY statusChanged)
     Q_PROPERTY(QList<QAction*> leagueActions MEMBER m_league_actions NOTIFY leagueListChanged)
     Q_PROPERTY(QList<QAction*> loggingActions MEMBER m_logging_actions CONSTANT)
     Q_PROPERTY(QAbstractItemModel* treeModel READ treeModel NOTIFY treeModelChanged)
@@ -51,10 +51,12 @@ public:
     static QString makeLogFilename(const QString& directory);
 
 signals:
+    void authenticationStatusChanged();
     void leagueListChanged();
     void leagueChanged();
     void treeModelChanged();
     void searchResultsChanged();
+    void statusChanged();
 
 public slots:
     void authenticate();
@@ -71,9 +73,7 @@ public slots:
 
     void refreshEverything();
     void refreshEverything_characterListReceived(QNetworkReply* reply);
-    void refreshEverything_characterReceived(QNetworkReply* reply);
     void refreshEverything_stashListReceived(QNetworkReply* reply);
-    void refreshEverything_stashReceived(QNetworkReply* reply);
 
     void setMinLevel(double value);
     void setMaxLevel(double value);
@@ -82,6 +82,9 @@ private:
     void loadSettings();
     void initLeagueActions();
     void initLoggingActions();
+
+    void updateCharacter(std::unique_ptr<poe_api::Character>& character);
+    void updateStash(std::unique_ptr<poe_api::StashTab>& stash);
 
     void getLeagues();
     void listCharacters();
@@ -97,6 +100,7 @@ private:
     void setLeague();
     void setLoggingLevel();
 
+    QString m_status_text{ "Status" };
     QStringList m_logging_levels;
 
     QNetworkAccessManager* m_network_manager{ nullptr };
@@ -116,6 +120,17 @@ private:
     QList<QAction*> m_refresh_actions;
     QList<QAction*> m_logging_actions;
 
-    std::unique_ptr<poe_api::CharacterList> m_characters;
-    std::unique_ptr<poe_api::StashTabList> m_stashes;
+    poe_api::CharacterList m_characters;
+    poe_api::StashTabList m_stashes;
+
+    bool m_authenticated{ false };
+
+    int m_characters_requested{ 0 };
+    int m_characters_received{ 0 };
+
+    int m_stashes_requested{ 0 };
+    int m_stashes_received{ 0 };
+
+    void updateStatus();
+
 };

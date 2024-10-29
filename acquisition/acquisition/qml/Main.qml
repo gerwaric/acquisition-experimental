@@ -11,6 +11,11 @@ ApplicationWindow {
 
     menuBar: MainMenuBar {}
 
+    footer: RowLayout {
+        Label { text: "Status:" }
+        Label { text: Acquisition.statusText; Layout.fillWidth: true }
+    }
+
     SplitView {
         id: splitView
         anchors.fill: parent

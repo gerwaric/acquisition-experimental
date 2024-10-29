@@ -37,12 +37,12 @@ namespace poe_api{
     using StashTabList = std::vector<std::unique_ptr<poe_api::StashTab>>;
 
     struct StashListWrapper {
-        std::unique_ptr<StashTabList> stashes;
+        StashTabList stashes;
         JS_OBJ(stashes);
     };
 
     struct StashWrapper {
-        std::unique_ptr<poe_api::StashTab> stash;
+        std::optional<poe_api::StashTab> stash;
         JS_OBJ(stash);
     };
 

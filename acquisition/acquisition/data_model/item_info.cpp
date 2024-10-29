@@ -24,3 +24,8 @@ ItemInfo::ArmourInfo::ArmourInfo(const poe_api::Item& item)
         };
     };
 }
+
+ItemInfo::ItemInfo(const poe_api::Item& item)
+{
+
+}

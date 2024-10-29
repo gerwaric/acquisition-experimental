@@ -10,8 +10,6 @@
 #include <QStringList>
 #include <QVariant>
 
-#include <vector>
-
 class LeagueDataStore : public QObject {
     Q_OBJECT
 public:
@@ -23,8 +21,8 @@ public:
     std::unique_ptr<poe_api::Character> getCharacter(const QString& character_id);
     std::unique_ptr<poe_api::StashTab> getStash(const QString& stash_id);
 
-    std::unique_ptr<poe_api::CharacterList> getCharacters();
-    std::unique_ptr<poe_api::StashTabList> getStashes();
+    poe_api::CharacterList getCharacters();
+    poe_api::StashTabList getStashes();
 
     void storeCharacter(const poe_api::Character& character);
     void storeStash(const poe_api::StashTab& stash_tab);

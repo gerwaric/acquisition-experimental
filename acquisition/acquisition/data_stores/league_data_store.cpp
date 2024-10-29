@@ -209,32 +209,36 @@ std::unique_ptr<poe_api::StashTab> LeagueDataStore::getStash(const QString& id)
     return std::move(stash_tab);
 }
 
-std::unique_ptr<poe_api::CharacterList> LeagueDataStore::getCharacters()
+poe_api::CharacterList LeagueDataStore::getCharacters()
 {
     const QStringList character_names = getCharacterList();
-    std::unique_ptr<poe_api::CharacterList> characters;
-    characters->reserve(character_names.size());
+    poe_api::CharacterList characters;
+    characters.reserve(character_names.size());
     for (const auto& name : character_names) {
         auto character = getCharacter(name);
-        if (character) {
-            characters->push_back(std::move(character));
+        if (!character) {
+            QLOG_ERROR() << "League data store returned an invalid character:" << name;
+            continue;
         };
+        characters.push_back(std::move(character));
     };
-    return std::move(characters);
+    return characters;
 }
 
-std::unique_ptr<poe_api::StashTabList> LeagueDataStore::getStashes()
+poe_api::StashTabList LeagueDataStore::getStashes()
 {
     const QStringList stash_ids = getStashList();
-    std::unique_ptr<poe_api::StashTabList> stashes;
-    stashes->reserve(stash_ids.size());
+    poe_api::StashTabList stashes;
+    stashes.reserve(stash_ids.size());
     for (const auto& id : stash_ids) {
         auto stash = getStash(id);
-        if (stash) {
-            stashes->push_back(std::move(stash));
+        if (!stash) {
+            QLOG_ERROR() << "League data store returned an invalid stash:" << id;
+            continue;
         };
+        stashes.push_back(std::move(stash));
     };
-    return std::move(stashes);
+    return stashes;
 }
 
 void LeagueDataStore::storeCharacter(const poe_api::Character& character)

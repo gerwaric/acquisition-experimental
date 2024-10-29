@@ -3,6 +3,7 @@
 ItemNode::ItemNode(const poe_api::Item& item, TreeNode* parent)
     : TreeNode(NodeType::Item, item.baseType, parent)
     , m_item(item)
+    , m_item_info(std::make_unique<ItemInfo>(item))
 {
     if (item.socketedItems) {
         addChildren<ItemNode>(item.socketedItems.value());

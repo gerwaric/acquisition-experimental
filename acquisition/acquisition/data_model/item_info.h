@@ -41,19 +41,6 @@ public:
         int total_links;
     };
 
-    struct Requirements {
-        Requirements(const poe_api::Item& item);
-        std::optional<int> level;
-        std::optional<int> strength;
-        std::optional<int> dexterity;
-        std::optional<int> intelligence;
-        std::optional<QString> character_class;
-    };
-
-    struct Miscellaneous {
-        Miscellaneous(const poe_api::Item& item);
-    };
-
     ItemInfo(const poe_api::Item& item);
 
     QString item_category;
@@ -62,6 +49,12 @@ public:
     std::optional<WeaponInfo> weapon_info;
     std::optional<ArmourInfo> armour_info;
     std::optional<SocketInfo> socket_info;
+
+    std::optional<int> required_level;
+    std::optional<int> required_strength;
+    std::optional<int> required_dexterity;
+    std::optional<int> required_intelligence;
+    std::optional<QString> required_class;
 
     std::optional<int> quality;
     std::optional<int> item_level;

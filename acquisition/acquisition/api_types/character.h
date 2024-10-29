@@ -76,12 +76,12 @@ namespace poe_api {
     using CharacterList = std::vector<std::unique_ptr<poe_api::Character>>;
 
     struct CharacterListWrapper {
-        std::unique_ptr<CharacterList> characters;
+        CharacterList characters;
         JS_OBJ(characters);
     };
 
     struct CharacterWrapper {
-        std::unique_ptr<poe_api::Character> character;
+        std::optional<poe_api::Character> character;
         JS_OBJ(character);
     };
 

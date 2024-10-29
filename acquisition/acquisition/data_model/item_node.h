@@ -1,6 +1,7 @@
 #pragma once
 
 #include <acquisition/api_types/item.h>
+#include <acquisition/data_model/item_info.h>
 #include <acquisition/data_model/tree_node.h>
 
 class ItemNode : public TreeNode
@@ -21,7 +22,9 @@ public:
     QVariant data(int column) const override;
 
     const poe_api::Item& item() const { return m_item; };
+    const ItemInfo& itemInfo() const { return *m_item_info; };
 
 private:
     const poe_api::Item& m_item;
+    const std::unique_ptr<ItemInfo> m_item_info;
 };
