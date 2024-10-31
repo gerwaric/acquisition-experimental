@@ -15,3 +15,14 @@ StashNode::StashNode(const poe_api::StashTab& stash, TreeNode* parent)
         addChildren<ItemNode>(stash.items.value());
     };
 }
+
+QVariant StashNode::data(int column) const
+{
+    if (column > 0) {
+        return "";
+    } else if (m_stash.index) {
+        return QString("#%1, %2").arg(QString::number(m_stash.index.value()), m_stash.name);
+    } else {
+        return m_stash.name;
+    };
+}

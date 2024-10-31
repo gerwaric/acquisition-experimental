@@ -120,6 +120,7 @@ QStringList LeagueDataStore::getCharacterList()
         };
         character_ids.push_back(query.value(0).toString());
     };
+    character_ids.sort();
     return character_ids;
 }
 
@@ -211,13 +212,13 @@ std::unique_ptr<poe_api::StashTab> LeagueDataStore::getStash(const QString& id)
 
 poe_api::CharacterList LeagueDataStore::getCharacters()
 {
-    const QStringList character_names = getCharacterList();
+    const QStringList character_ids = getCharacterList();
     poe_api::CharacterList characters;
-    characters.reserve(character_names.size());
-    for (const auto& name : character_names) {
-        auto character = getCharacter(name);
+    characters.reserve(character_ids.size());
+    for (const auto& id : character_ids) {
+        auto character = getCharacter(id);
         if (!character) {
-            QLOG_ERROR() << "League data store returned an invalid character:" << name;
+            QLOG_ERROR() << "League data store returned an invalid character:" << id;
             continue;
         };
         characters.push_back(std::move(character));
@@ -238,6 +239,13 @@ poe_api::StashTabList LeagueDataStore::getStashes()
         };
         stashes.push_back(std::move(stash));
     };
+
+    // Sort based on index.
+    std::sort(stashes.begin(), stashes.end(),
+        [](const std::unique_ptr<poe_api::StashTab>& a, const std::unique_ptr<poe_api::StashTab>& b) {
+            return a->index.value_or(0) < b->index.value_or(0);
+        });
+
     return stashes;
 }
 

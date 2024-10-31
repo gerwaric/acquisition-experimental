@@ -191,6 +191,12 @@ namespace poe_api {
             isRelic, foilVariation, replica, foreseeing, incubatedItem, scourged, crucible, ruthless,
             frameType, artFilename, hybrid, extended, x, y, inventoryId, socket, colour
             );
+
+        inline bool operator<(const Item& other) const {
+            const QString a = name.isEmpty() ? typeLine : name + " " + typeLine;
+            const QString b = other.name.isEmpty() ? other.typeLine : other.name + " " + other.typeLine;
+            return a < b;
+        };
     };
 
 }

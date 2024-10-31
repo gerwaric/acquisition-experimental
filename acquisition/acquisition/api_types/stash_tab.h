@@ -32,6 +32,12 @@ namespace poe_api{
         std::optional<std::vector<poe_api::StashTab>> children; // ? array of StashTab
         std::optional<std::vector<poe_api::Item>> items; // ? array of Item
         JS_OBJ(id, parent, name, type, index, metadata, children, items);
+
+        inline bool operator<(const StashTab& other) const {
+            const unsigned a = index.value_or(0);
+            const unsigned b = other.index.value_or(0);
+            return a < b;
+        };
     };
 
     using StashTabList = std::vector<std::unique_ptr<poe_api::StashTab>>;

@@ -144,5 +144,4 @@ int main(int argc, char* argv[])
     m_oauth.setReplyHandler(&m_handler);
     m_oauth.grant();
     */
-
 }

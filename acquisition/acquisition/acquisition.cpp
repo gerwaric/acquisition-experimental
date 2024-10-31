@@ -305,9 +305,6 @@ void Acquisition::updateCharacter(std::unique_ptr<poe_api::Character>& character
             ++m_characters_received;
             const auto bytes(reply->readAll());
             const auto payload = utils::parse_json<poe_api::CharacterWrapper>(bytes);
-
-            QLOG_FATAL().noquote() << "CHARACTER BYTES" << bytes;
-            QLOG_FATAL().noquote() << "CHARACTER VALUE" << JS::serializeStruct(payload, JS::SerializerOptions::Compact);
             reply->deleteLater();
             if (!payload->character) {
                 QLOG_ERROR() << "Acquisition: recieved empty character";

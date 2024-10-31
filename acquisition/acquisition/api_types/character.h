@@ -71,6 +71,11 @@ namespace poe_api {
             JS_MEMBER(jewels),
             JS_MEMBER(passives),
             JS_MEMBER(metadata));
+
+        inline bool operator<(const Character& other) const {
+            return name < other.name;
+        };
+
     };
 
     using CharacterList = std::vector<std::unique_ptr<poe_api::Character>>;

@@ -24,7 +24,6 @@ public:
     virtual ~TreeNode() {};
 
     inline const QString& name() const {
-        QLOG_FATAL() << "NODE:" << m_name;
         return m_name;
     };
 
