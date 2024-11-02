@@ -1,6 +1,6 @@
 #pragma once
 
-#include <acquisition/api_types/item.h>
+#include <acquisition/data_model/item_info.h>
 #include <acquisition/data_model/tree_model.h>
 
 #include <QSortFilterProxyModel>
@@ -8,7 +8,7 @@
 #include <unordered_map>
 #include <vector>
 
-using FilterFunction = std::function<bool(const poe_api::Item& item)>;
+using FilterFunction = std::function<bool(const ItemInfo& item_info)>;
 
 class ProxyModel : public QSortFilterProxyModel {
     Q_OBJECT

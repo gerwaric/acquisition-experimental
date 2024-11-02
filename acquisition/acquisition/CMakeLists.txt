@@ -2,6 +2,8 @@ target_sources(acquisition PRIVATE
     "acquisition.cpp"
     "acquisition.h"
     "constants.h"
+    "float_filter.cpp"
+    "float_filter.h"
     "main.cpp"
     "proxy_model.cpp"
     "proxy_model.h"

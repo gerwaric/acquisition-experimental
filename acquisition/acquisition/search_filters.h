@@ -1,11 +1,11 @@
 #pragma once
 
-#include <acquisition/api_types/item.h>
+#include <acquisition/data_model/item_info.h>
 
 #include <QObject>
 #include <QQmlEngine>
 
-using FilterFunction = std::function<bool(const poe_api::Item& item)>;
+using FilterFunction = std::function<bool(const ItemInfo& item_info)>;
 
 class SearchFilter {
 

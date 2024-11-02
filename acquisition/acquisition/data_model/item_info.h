@@ -43,6 +43,7 @@ enum class RequirementType {
 
 class ItemInfo {
 public:
+
     ItemInfo(const poe_api::Item& item);
 
     QString item_category;
@@ -70,11 +71,14 @@ public:
     int white_sockets{ 0 };
     int sockets{ 0 };
 
-    int red_links{ 0 };
-    int green_links{ 0 };
-    int blue_links{ 0 };
-    int white_links{ 0 };
-    int links{ 0 };
+    struct SocketGroup {
+        unsigned red;
+        unsigned green;
+        unsigned blue;
+        unsigned white;
+        unsigned abyss;
+    };
+    std::vector<SocketGroup> socket_groups;
 
     int required_level{ 0 };
     int required_strength{ 0 };
@@ -110,6 +114,7 @@ public:
     int scourge_tier{ 0 };
 
 private:
+    void loadSockets(const poe_api::Item& item);
     void loadProperties(const poe_api::Item& item);
     void loadRequirements(const poe_api::Item& item);
     float averageValue(const QString& property, bool* ok);

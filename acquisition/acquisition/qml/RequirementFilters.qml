@@ -18,17 +18,15 @@ ColumnLayout {
         Label { text: "Level" }
         TextField {
             id: minLevel
-            inputMask: "99999"
-            inputMethodHints: Qt.ImhDigitsOnly
-            placeholderText: "Min";
-            Layout.preferredWidth: 40;
-            onTextChanged: { Acquisition.setMinLevel(parseInt(text, 10)) }
+            placeholderText: "Min"
+            Layout.preferredWidth: 40
+            onTextChanged: { Acquisition.setFilter("MIN_LEVEL", parseInt(text, 10)) }
         }
         TextField {
             id: maxLevel
-            placeholderText: "Max";
+            placeholderText: "Max"
             inputMethodHints: Qt.ImhDigitsOnly
-            Layout.preferredWidth: 40;
+            Layout.preferredWidth: 40
         }
 
         Label { text: "Stength" }

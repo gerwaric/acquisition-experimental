@@ -444,22 +444,27 @@ void Acquisition::getStash(
 
 void Acquisition::setMinLevel(double value)
 {
+    QLOG_DEBUG() << "Set minimum level to" << value;
     if (std::isnan(value)) {
         m_proxy_model->removeFilter("MIN_LEVEL");
-    } else {
-        m_proxy_model->setFilter("MIN_LEVEL",
-            [value](const poe_api::Item& item) {
-                if (!item.requirements) {
-                    return true;
-                };
-                //auto& requirements = item.requirements.value();
-            });
+        return;
     };
+    m_proxy_model->setFilter("MIN_LEVEL",
+        [value](const ItemInfo& item_info) {
+            return item_info.required_level >= value;
+        });
 }
 
 void Acquisition::setMaxLevel(double  value)
 {
-
+    if (std::isnan(value)) {
+        m_proxy_model->removeFilter("MAX_LEVEL");
+        return;
+    };
+    m_proxy_model->setFilter("MAX_LEVEL",
+        [value](const ItemInfo& item_info) {
+            return item_info.required_level <= value;
+        });
 }
 
 void Acquisition::updateStatus()

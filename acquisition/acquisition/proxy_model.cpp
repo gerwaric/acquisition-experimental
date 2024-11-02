@@ -27,14 +27,15 @@ bool ProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent
         QLOG_ERROR() << "ProxyModel::filterAcceptsRow() node pointer is null";
         return true;
     };
+    if (node->type() != TreeNode::NodeType::Item) {
+        return true;
+    };
 
-    if (node->type() == TreeNode::NodeType::Item) {
-        const ItemNode* item_node = static_cast<const ItemNode*>(node);
-        const poe_api::Item& item = item_node->item();
-        for (const auto& filter : m_filters) {
-            if (!filter(item)) {
-                return false;
-            };
+    const ItemNode* item_node = static_cast<const ItemNode*>(node);
+    const ItemInfo item_info = item_node->itemInfo();
+    for (const auto& filter : m_filters) {
+        if (!filter(item_info)) {
+            return false;
         };
     };
     return true;
@@ -49,6 +50,7 @@ void ProxyModel::setFilter(const QString& id, FilterFunction filter)
         const int i = m_filter_index[id];
         m_filters[i] = filter;
     };
+    invalidateFilter();
 }
 
 void ProxyModel::removeFilter(const QString& id)
@@ -60,4 +62,5 @@ void ProxyModel::removeFilter(const QString& id)
     const int i = m_filter_index[id];
     m_filters.erase(m_filters.begin() + i);
     m_filter_index.erase(id);
+    invalidateFilter();
 }

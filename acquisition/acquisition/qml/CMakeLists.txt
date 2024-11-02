@@ -6,6 +6,7 @@ qt_add_qml_module(acquisition
         ArmourFilters.qml
         AutoComplete.qml
         FilterSectionHeader.qml
+        FloatFilterField.qml
         HeistFilters.qml
         Main.qml
         MainMenuBar.qml

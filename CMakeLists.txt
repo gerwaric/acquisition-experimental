@@ -21,8 +21,6 @@ find_package(Qt6 REQUIRED COMPONENTS HttpServer Network NetworkAuth Quick Sql)
 
 qt_standard_project_setup(REQUIRES 6.8)
 
-qt_add_executable(acquisition WIN32 MACOSX_BUNDLE)
-
 set_target_properties(acquisition PROPERTIES
     QT_QMLCACHEGEN_ARGUMENTS "--verbose"
 )
