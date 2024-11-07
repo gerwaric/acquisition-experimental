@@ -2,6 +2,7 @@
 
 #include <acquisition/data_model/item_info.h>
 #include <acquisition/data_model/tree_model.h>
+#include <acquisition/search_filters.h>
 
 #include <QSortFilterProxyModel>
 
@@ -17,12 +18,12 @@ public:
 
     bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
 
-    void setFilter(const QString& id, FilterFunction filter);
-    void removeFilter(const QString& id);
+    void setFilter(SearchFilters::Filter id, FilterFunction filter);
+    void removeFilter(SearchFilters::Filter id);
 
 private:
 
-    std::unordered_map<QString, int> m_filter_index;
+    std::unordered_map<SearchFilters::Filter, int> m_filter_index;
 
     std::vector<FilterFunction> m_filters;
 

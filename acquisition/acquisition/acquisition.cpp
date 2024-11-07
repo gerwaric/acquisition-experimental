@@ -446,10 +446,10 @@ void Acquisition::setMinLevel(double value)
 {
     QLOG_DEBUG() << "Set minimum level to" << value;
     if (std::isnan(value)) {
-        m_proxy_model->removeFilter("MIN_LEVEL");
+        m_proxy_model->removeFilter(SearchFilters::Filter::LevelMin);
         return;
     };
-    m_proxy_model->setFilter("MIN_LEVEL",
+    m_proxy_model->setFilter(SearchFilters::Filter::LevelMin,
         [value](const ItemInfo& item_info) {
             return item_info.required_level >= value;
         });
@@ -458,10 +458,10 @@ void Acquisition::setMinLevel(double value)
 void Acquisition::setMaxLevel(double  value)
 {
     if (std::isnan(value)) {
-        m_proxy_model->removeFilter("MAX_LEVEL");
+        m_proxy_model->removeFilter(SearchFilters::Filter::LevelMax);
         return;
     };
-    m_proxy_model->setFilter("MAX_LEVEL",
+    m_proxy_model->setFilter(SearchFilters::Filter::LevelMax,
         [value](const ItemInfo& item_info) {
             return item_info.required_level <= value;
         });

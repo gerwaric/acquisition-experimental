@@ -21,6 +21,31 @@ find_package(Qt6 REQUIRED COMPONENTS HttpServer Network NetworkAuth Quick Sql)
 
 qt_standard_project_setup(REQUIRES 6.8)
 
+qt_add_executable(acquisition WIN32 MACOSX_BUNDLE)
+
+qt_add_qml_module(acquisition
+    URI MyAcquisition
+    VERSION 1.0
+    QML_FILES
+        acquisition/acquisition/qml/ActionListMenu.qml
+        acquisition/acquisition/qml/ArmourFilters.qml
+        acquisition/acquisition/qml/AutoComplete.qml
+        acquisition/acquisition/qml/FilterSectionHeader.qml
+        acquisition/acquisition/qml/FloatFilterField.qml
+        acquisition/acquisition/qml/HeistFilters.qml
+        acquisition/acquisition/qml/Main.qml
+        acquisition/acquisition/qml/MainMenuBar.qml
+        acquisition/acquisition/qml/MapFilters.qml
+        acquisition/acquisition/qml/MiscellaneousFilters.qml
+        acquisition/acquisition/qml/RequirementFilters.qml
+        acquisition/acquisition/qml/SearchFilterGroup.qml
+        acquisition/acquisition/qml/SanctumFilters.qml
+        acquisition/acquisition/qml/SocketFilters.qml
+        acquisition/acquisition/qml/TypeFilters.qml
+        acquisition/acquisition/qml/UltimatumFilters.qml
+        acquisition/acquisition/qml/WeaponFilters.qml
+)
+
 set_target_properties(acquisition PROPERTIES
     QT_QMLCACHEGEN_ARGUMENTS "--verbose"
 )

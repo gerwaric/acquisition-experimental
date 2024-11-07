@@ -3,24 +3,30 @@
 #include <acquisition/proxy_model.h>
 
 #include <acquisition/api_types/item.h>
+#include <acquisition/search_filters.h>
 
 #include <QObject>
 
+template<class T>
+using Getter = std::function<T(const ItemInfo& item_info)>;
+
 class FloatFilter : public QObject {
     Q_OBJECT
-    Q_PROPERTY(value READ value WRITE setValue NOTIFY valueChanged)
+    Q_PROPERTY(float value READ value WRITE setValue NOTIFY valueChanged)
 public:
     explicit FloatFilter(
-        const QString& filter_id,
-        std::function<float(const poe_api::Item& item)> getter,
+        SearchFilters::Filter id,
         ProxyModel& model,
+        Getter<float> getter,
         QObject* parent);
-    float value() const { return m_value; };
+    inline float value() const { return m_value; };
+public slots:
     void setValue(float value);
 signals:
-    void valueChanged();
+    void valueChanged(float value);
 private:
-    float m_value;
-    std::function<float(const poe_api::Item& item)> m_getter;
+    const SearchFilters::Filter m_id;
     ProxyModel& m_model;
+    Getter<float> m_getter;
+    float m_value;
 };

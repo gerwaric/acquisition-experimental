@@ -41,11 +41,11 @@ bool ProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent
     return true;
 }
 
-void ProxyModel::setFilter(const QString& id, FilterFunction filter)
+void ProxyModel::setFilter(SearchFilters::Filter id, FilterFunction filter)
 {
     if (m_filter_index.count(id) == 0) {
         m_filters.push_back(filter);
-        m_filter_index[id] = m_filters.size() - 1;
+        m_filter_index[id] = static_cast<int>(m_filters.size()) - 1;
     } else {
         const int i = m_filter_index[id];
         m_filters[i] = filter;
@@ -53,7 +53,7 @@ void ProxyModel::setFilter(const QString& id, FilterFunction filter)
     invalidateFilter();
 }
 
-void ProxyModel::removeFilter(const QString& id)
+void ProxyModel::removeFilter(SearchFilters::Filter id)
 {
     if (m_filter_index.count(id) == 0) {
         QLOG_ERROR() << "ProxyModel::removeFilter() filter does not exist:" << id;

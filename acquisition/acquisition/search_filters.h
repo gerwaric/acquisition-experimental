@@ -7,11 +7,6 @@
 
 using FilterFunction = std::function<bool(const ItemInfo& item_info)>;
 
-class SearchFilter {
-
-
-};
-
 class SearchFilters : public QObject {
     Q_OBJECT
     Q_PROPERTY(QStringList itemCategories MEMBER m_item_categories CONSTANT);
@@ -31,14 +26,11 @@ class SearchFilters : public QObject {
 public:
     SearchFilters(QObject* parent = nullptr);
 
-
-    enum class Type {
+    enum class Filter {
+        // Type
         Category,
-        Rarity
-    };
-    Q_ENUM(Type)
-
-    enum class Weapon {
+        Rarity,
+        // Weapon Filters
         DamageMin,
         DamageMax,
         CriticalChanceMin,
@@ -48,11 +40,8 @@ public:
         DamagePerSecondMin,
         DamagePerSecondMax,
         ElementalDpsMin,
-        ElementalDpsMax
-    };
-    Q_ENUM(Weapon)
-
-    enum class Armour {
+        ElementalDpsMax,
+        // Armour Filters
         ArmourMin,
         ArmourMax,
         EnergyShieldMin,
@@ -64,11 +53,8 @@ public:
         WardMin,
         WardMax,
         BasePercentileMin,
-        BasePercentileMax
-    };
-    Q_ENUM(Armour)
-
-    enum class Socket {
+        BasePercentileMax,
+        // Socket Filters
         SocketsRed,
         SocketsGreen,
         SocketsBlue,
@@ -79,11 +65,8 @@ public:
         LinksBlue,
         LinksWhite,
         LinksMin,
-        LinksMax
-    };
-    Q_ENUM(Socket)
-
-    enum class Requirements {
+        LinksMax,
+        // Requirements
         LevelMin,
         LevelMax,
         StrengthMin,
@@ -92,11 +75,8 @@ public:
         DexterityMax,
         IntelligenceMin,
         IntelligenceMax,
-        CharacterClass
-    };
-    Q_ENUM(Requirements)
-
-    enum class MapFilters {
+        CharacterClass,
+        // MapFilters
         MapTier,
         MapPacksize,
         MapIIR,
@@ -105,11 +85,8 @@ public:
         MapSeries,
         BlightedMap,
         BlightRavagedMap,
-        MapCompletionReward
-    };
-    Q_ENUM(MapFilters)
-
-    enum class HeistFilters {
+        MapCompletionReward,
+        // HeistFilters
         WingsRevealed,
         TotalWingsRevealed,
         EscapeRoutesRevealed,
@@ -125,27 +102,18 @@ public:
         TrapDisarmamentLevel,
         AgilityLevel,
         DeceptionLevel,
-        EngineeringLevel
-    };
-    Q_ENUM(HeistFilters)
-
-    enum class SanctumFilters {
+        EngineeringLevel,
+        // SanctumFilters
         Resolve,
         MaximumResolve,
         Inspiration,
-        Aureus
-    };
-    Q_ENUM(SanctumFilters)
-
-    enum class UltimatumFilters {
+        Aureus,
+        // UltimatumFilters
         ChallengeType,
         RewardType,
         RequiredItem,
-        RewardUnique
-    };
-    Q_ENUM(UltimatumFilters)
-
-    enum class Miscellaneous  {
+        RewardUnique,
+        // Miscellaneous
         QualityMin,
         QualityMax,
         ItemLevelMin,
@@ -177,9 +145,9 @@ public:
         StaskSizeMax,
         AlternateArt,
         FoilVariation,
-        ScourgeTier
+        ScourgeTier,
     };
-    Q_ENUM(Miscellaneous)
+    Q_ENUM(Filter)
 
 private:
 
