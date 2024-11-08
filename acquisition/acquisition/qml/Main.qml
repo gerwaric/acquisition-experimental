@@ -37,6 +37,11 @@ ApplicationWindow {
                     model: ["Search Items"]
                 }
 
+                Label {
+                    text: "Trade Filters"
+                    Layout.fillWidth: true
+                }
+
                 TypeFilters {}
                 WeaponFilters {}
                 ArmourFilters {}
@@ -47,6 +52,14 @@ ApplicationWindow {
                 SanctumFilters {}
                 UltimatumFilters {}
                 MiscellaneousFilters {}
+
+                Label {
+                    text: "Common Stats"
+                    Layout.fillWidth: true
+                }
+
+                AttributeFilters {}
+                ResistanceFilters {}
 
                 Rectangle { Layout.fillHeight: true }
             }

@@ -75,9 +75,6 @@ public slots:
     void refreshEverything_characterListReceived(QNetworkReply* reply);
     void refreshEverything_stashListReceived(QNetworkReply* reply);
 
-    void setMinLevel(double value);
-    void setMaxLevel(double value);
-
 private:
     void loadSettings();
     void initLeagueActions();
@@ -125,11 +122,11 @@ private:
 
     bool m_authenticated{ false };
 
-    int m_characters_requested{ 0 };
-    int m_characters_received{ 0 };
+    size_t m_characters_requested{ 0 };
+    size_t m_characters_received{ 0 };
 
-    int m_stashes_requested{ 0 };
-    int m_stashes_received{ 0 };
+    size_t m_stashes_requested{ 0 };
+    size_t m_stashes_received{ 0 };
 
     void updateStatus();
 

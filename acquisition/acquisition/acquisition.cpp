@@ -43,7 +43,7 @@ Acquisition::Acquisition(QObject* parent) : QObject(parent)
     m_rate_limiter = new RateLimiter(*m_network_manager, this);
     m_tree_model = new TreeModel(this);
     m_proxy_model = new ProxyModel(this);
-    m_search_filters = new SearchFilters(this);
+    m_search_filters = new SearchFilters(*m_proxy_model, this);
 
     m_proxy_model->setSourceModel(m_tree_model);
 
@@ -439,31 +439,6 @@ void Acquisition::getStash(
         [](QNetworkReply* reply) {
             auto payload = utils::parse_json<poe_api::StashWrapper>(reply->readAll());
             reply->deleteLater();
-        });
-}
-
-void Acquisition::setMinLevel(double value)
-{
-    QLOG_DEBUG() << "Set minimum level to" << value;
-    if (std::isnan(value)) {
-        m_proxy_model->removeFilter(SearchFilters::Filter::LevelMin);
-        return;
-    };
-    m_proxy_model->setFilter(SearchFilters::Filter::LevelMin,
-        [value](const ItemInfo& item_info) {
-            return item_info.required_level >= value;
-        });
-}
-
-void Acquisition::setMaxLevel(double  value)
-{
-    if (std::isnan(value)) {
-        m_proxy_model->removeFilter(SearchFilters::Filter::LevelMax);
-        return;
-    };
-    m_proxy_model->setFilter(SearchFilters::Filter::LevelMax,
-        [value](const ItemInfo& item_info) {
-            return item_info.required_level <= value;
         });
 }
 

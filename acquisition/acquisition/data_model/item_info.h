@@ -46,30 +46,68 @@ public:
 
     ItemInfo(const poe_api::Item& item);
 
-    QString item_category;
-    poe_api::FrameType item_rarity;
+    inline static float damage(const ItemInfo& item) { return item.m_damage; };
+    inline static float criticalChance(const ItemInfo& item) { return item.m_critical_chance; };
+    inline static float physicalDamagePerSecond(const ItemInfo& item) { return item.m_physical_dps; };
+    inline static float attacksPerSecond(const ItemInfo& item) { return item.m_attacks_per_second; };
+    inline static float damagePerSecond(const ItemInfo& item) { return item.m_damage_per_second; };
+    inline static float elementalDamagePerSecond(const ItemInfo& item) { return item.m_elemental_dps; };
+    inline static float chaosDamagePerSecond(const ItemInfo& item) { return item.m_chaos_dps; };
 
-    float damage{ 0.0 };
-    float critical_chance{ 0.0 };
-    float physical_dps{ 0.0 };
-    float attacks_per_second{ 0.0 };
-    float damage_per_second{ 0.0 };
-    float elemental_dps{ 0.0 };
+    inline static int redSockets(const ItemInfo& item) { return item.m_red_sockets; };
+    inline static int greenSockets(const ItemInfo& item) { return item.m_green_sockets; };
+    inline static int blueSockets(const ItemInfo& item) { return item.m_blue_sockets; };
+    inline static int whiteSockets(const ItemInfo& item) { return item.m_white_sockets; };
+    inline static int abyssSockets(const ItemInfo& item) { return item.m_abyss_sockets; };
+    inline static int sockets(const ItemInfo& item) { return item.m_sockets; };
 
-    float chaos_dps{ 0.0 }; // currently unused
+    // TBD: socket groups
 
-    int armour{ 0 };
-    int energy_shield{ 0 };
-    int block{ 0 };
-    int evasion{ 0 };
-    int ward{ 0 };
-    int base_percentile{ 0 };
+    inline static float armour(const ItemInfo& item) { return item.m_armour; };
+    inline static float energyShield(const ItemInfo& item) { return item.m_energy_shield; };
+    inline static float block(const ItemInfo& item) { return item.m_block; };
+    inline static float evasionRating(const ItemInfo& item) { return item.m_evasion_rating; };
+    inline static float ward(const ItemInfo& item) { return item.m_ward; };
+    inline static float basePercentile(const ItemInfo& item) { return item.m_base_percentile; };
 
-    int red_sockets{ 0 };
-    int green_sockets{ 0 };
-    int blue_sockets{ 0 };
-    int white_sockets{ 0 };
-    int sockets{ 0 };
+    inline static float requiredLevel(const ItemInfo& item) { return item.m_required_level; };
+    inline static float requiredStrength(const ItemInfo& item) { return item.m_required_strength; };
+    inline static float requiredDexterity(const ItemInfo& item) { return item.m_required_dexterity; };
+    inline static float requiredIntelligence(const ItemInfo& item) { return item.m_required_intelligence; };
+    inline static QString requiredClass(const ItemInfo& item) { return item.m_required_class; };
+
+private:
+
+    static float averageValue(const QString& ranged_value, bool* ok);
+
+    void loadSockets(const poe_api::Item& item);
+    void loadProperties(const poe_api::Item& item);
+    void loadRequirements(const poe_api::Item& item);
+
+    QString m_item_category;
+    poe_api::FrameType m_item_rarity;
+
+    float m_damage{ 0.0 };
+    float m_critical_chance{ 0.0 };
+    float m_physical_dps{ 0.0 };
+    float m_attacks_per_second{ 0.0 };
+    float m_damage_per_second{ 0.0 };
+    float m_elemental_dps{ 0.0 };
+    float m_chaos_dps{ 0.0 }; // custom extension
+
+    int m_armour{ 0 };
+    int m_energy_shield{ 0 };
+    int m_block{ 0 };
+    int m_evasion_rating{ 0 };
+    int m_ward{ 0 };
+    int m_base_percentile{ 0 };
+
+    int m_red_sockets{ 0 };
+    int m_green_sockets{ 0 };
+    int m_blue_sockets{ 0 };
+    int m_white_sockets{ 0 };
+    int m_abyss_sockets{ 0 }; // custom extension
+    int m_sockets{ 0 };
 
     struct SocketGroup {
         unsigned red;
@@ -78,118 +116,38 @@ public:
         unsigned white;
         unsigned abyss;
     };
-    std::vector<SocketGroup> socket_groups;
+    std::vector<SocketGroup> m_socket_groups;
 
-    int required_level{ 0 };
-    int required_strength{ 0 };
-    int required_dexterity{ 0 };
-    int required_intelligence{ 0 };
-    QString required_class;
+    int m_required_level{ 0 };
+    int m_required_strength{ 0 };
+    int m_required_dexterity{ 0 };
+    int m_required_intelligence{ 0 };
+    QString m_required_class;
 
-    int quality{ 0 };
-    int item_level{ 0 };
-    int gem_level{ 0 };
-    int gem_experience{ 0 };
+    int m_quality{ 0 };
+    int m_item_level{ 0 };
+    int m_gem_level{ 0 };
+    int m_gem_experience{ 0 };
 
-    bool transigured_gem{ false };
-    bool vaal_gem{ false };
-    QString corpse_type;
-    bool crucible_item{ false };
-    bool fractured_item{ false };
-    bool synthesised_item{ false };
-    bool searing_exarch_item{ false };
-    bool eater_of_worlds_item{ false };
-    bool identified{ false };
-    bool corrupted{ false };
-    bool mirrored{ false };
-    bool split{ false };
-    bool crafted{ false };
-    bool veiled{ false };
-    bool forseeing{ false };
-    int talisman_tier{ 0 };
-    int stored_experience{ 0 };
-    int stack_size{ 0 };
-    QString alternate_art;
-    QString foil_variation;
-    int scourge_tier{ 0 };
-
-private:
-    void loadSockets(const poe_api::Item& item);
-    void loadProperties(const poe_api::Item& item);
-    void loadRequirements(const poe_api::Item& item);
-    float averageValue(const QString& property, bool* ok);
+    bool m_transigured_gem{ false };
+    bool m_vaal_gem{ false };
+    QString m_corpse_type;
+    bool m_crucible_item{ false };
+    bool m_fractured_item{ false };
+    bool m_synthesised_item{ false };
+    bool m_searing_exarch_item{ false };
+    bool m_eater_of_worlds_item{ false };
+    bool m_identified{ false };
+    bool m_corrupted{ false };
+    bool m_mirrored{ false };
+    bool m_split{ false };
+    bool m_crafted{ false };
+    bool m_veiled{ false };
+    bool m_forseeing{ false };
+    int m_talisman_tier{ 0 };
+    int m_stored_experience{ 0 };
+    int m_stack_size{ 0 };
+    QString m_alternate_art;
+    QString m_foil_variation;
+    int m_scourge_tier{ 0 };
 };
-
-/*
-class ItemInfo {
-public:
-    ItemInfo(const poe_api::Item& item);
-
-    QString item_category;
-    QString item_rarity;
-
-    std::optional<float> damage;
-    std::optional<float> critical_chance;
-    std::optional<float> physical_dps;
-    std::optional<float> attacks_per_second;
-    std::optional<float> damage_per_second;
-    std::optional<float> elemental_dps;
-
-    std::optional<int> armour;
-    std::optional<int> energy_shield;
-    std::optional<int> block;
-    std::optional<int> evasion;
-    std::optional<int> ward;
-    std::optional<int> base_percentile;
-
-    std::optional<int> red_sockets;
-    std::optional<int> green_sockets;
-    std::optional<int> blue_sockets;
-    std::optional<int> white_sockets;
-    std::optional<int> sockets;
-
-    std::optional<int> red_links;
-    std::optional<int> green_links;
-    std::optional<int> blue_links;
-    std::optional<int> white_links;
-    std::optional<int> links;
-
-    std::optional<int> required_level;
-    std::optional<int> required_strength;
-    std::optional<int> required_dexterity;
-    std::optional<int> required_intelligence;
-    std::optional<QString> required_class;
-
-    std::optional<int> quality;
-    std::optional<int> item_level;
-    std::optional<int> gem_level;
-    std::optional<int> gem_experience;
-
-    bool transigured_gem;
-    bool vaal_gem;
-    std::optional<QString> corpse_type;
-    bool crucible_item;
-    bool fractured_item;
-    bool synthesised_item;
-    bool searing_exarch_item;
-    bool eater_of_worlds_item;
-    bool identified;
-    bool corrupted;
-    bool mirrored;
-    bool split;
-    bool crafted;
-    bool veiled;
-    bool forseeing;
-    int talisman_tier;
-    int stored_experience;
-    int stack_size;
-    std::optional<QString> alternate_art;
-    std::optional<QString> foil_variation;
-    int scourge_tier;
-
-private:
-    void loadProperties(const poe_api::Item& item);
-    void loadRequirements(const poe_api::Item& item);
-
-};
-*/

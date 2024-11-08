@@ -7,8 +7,6 @@ project(acquisition
     LANGUAGES CXX
 )
 
-set(CMAKE_AUTOMOC true)
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -31,7 +29,7 @@ qt_add_qml_module(acquisition
         acquisition/acquisition/qml/ArmourFilters.qml
         acquisition/acquisition/qml/AutoComplete.qml
         acquisition/acquisition/qml/FilterSectionHeader.qml
-        acquisition/acquisition/qml/FloatFilterField.qml
+        acquisition/acquisition/qml/IntField.qml
         acquisition/acquisition/qml/HeistFilters.qml
         acquisition/acquisition/qml/Main.qml
         acquisition/acquisition/qml/MainMenuBar.qml
@@ -44,6 +42,10 @@ qt_add_qml_module(acquisition
         acquisition/acquisition/qml/TypeFilters.qml
         acquisition/acquisition/qml/UltimatumFilters.qml
         acquisition/acquisition/qml/WeaponFilters.qml
+        acquisition/acquisition/qml/MinField.qml
+        acquisition/acquisition/qml/AttributeFilters.qml
+        acquisition/acquisition/qml/ResistanceFilters.qml
+        #acquisition/acquisition/qml/MaxField.qml
 )
 
 set_target_properties(acquisition PROPERTIES

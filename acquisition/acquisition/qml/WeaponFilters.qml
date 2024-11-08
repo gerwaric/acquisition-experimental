@@ -38,5 +38,9 @@ ColumnLayout {
         Label { text: "Elemental DPS" }
         TextField { placeholderText: "Min"; Layout.preferredWidth: 40; inputMethodHints: Qt.ImhFormattedNumbersOnly }
         TextField { placeholderText: "Max"; Layout.preferredWidth: 40; inputMethodHints: Qt.ImhFormattedNumbersOnly }
+
+        Label { text: "Chaos DPS" }
+        TextField { placeholderText: "Min"; Layout.preferredWidth: 40; inputMethodHints: Qt.ImhFormattedNumbersOnly }
+        TextField { placeholderText: "Max"; Layout.preferredWidth: 40; inputMethodHints: Qt.ImhFormattedNumbersOnly }
     }
 }

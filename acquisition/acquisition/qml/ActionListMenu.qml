@@ -1,13 +1,13 @@
 import QtQuick
-import QtQuick.Controls
+import QtQuick.Controls.Fusion
 
 Menu {
-    id: automaticMenu
+    id: menuRoot
 
     required property var actions
 
     Repeater {
-        model: automaticMenu.actions
+        model: menuRoot.actions
         delegate: MenuItem {
             text: modelData.text
             checkable: modelData.checkable

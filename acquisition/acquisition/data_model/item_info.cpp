@@ -4,30 +4,30 @@
 
 ItemInfo::ItemInfo(const poe_api::Item& item)
 {
-    item_rarity = item.frameType;
+    m_item_rarity = item.frameType;
 
     loadSockets(item);
     loadProperties(item);
     loadRequirements(item);
 
     //bool transigured_gem;
-    vaal_gem = (item.hybrid) ? item.hybrid.value().isVaalGem.value_or(false) : false;
+    m_vaal_gem = (item.hybrid) ? item.hybrid.value().isVaalGem.value_or(false) : false;
     //QString corpse_type;
-    crucible_item = item.crucible.has_value();
-    fractured_item = item.fractured.value_or(false);
-    synthesised_item = item.synthesised.value_or(false);
-    searing_exarch_item = item.searing.value_or(false);
-    eater_of_worlds_item = item.tangled.value_or(false);
-    identified = item.identified;
-    corrupted = item.corrupted.value_or(false);
+    m_crucible_item = item.crucible.has_value();
+    m_fractured_item = item.fractured.value_or(false);
+    m_synthesised_item = item.synthesised.value_or(false);
+    m_searing_exarch_item = item.searing.value_or(false);
+    m_eater_of_worlds_item = item.tangled.value_or(false);
+    m_identified = item.identified;
+    m_corrupted = item.corrupted.value_or(false);
     //bool mirrored;
-    split = item.split.value_or(false);
-    crafted = item.craftedMods.has_value();
-    veiled = item.veiled.value_or(false);
-    forseeing = item.foreseeing.value_or(false);
-    talisman_tier = item.talismanTier.value_or(0);
+    m_split = item.split.value_or(false);
+    m_crafted = item.craftedMods.has_value();
+    m_veiled = item.veiled.value_or(false);
+    m_forseeing = item.foreseeing.value_or(false);
+    m_talisman_tier = item.talismanTier.value_or(0);
     //int stored_experience;
-    stack_size = item.stackSize.value_or(0);
+    m_stack_size = item.stackSize.value_or(0);
     //QString alternate_art;
     //QString foil_variation;
     //int scourge_tier;
@@ -41,18 +41,18 @@ void ItemInfo::loadSockets(const poe_api::Item& item)
     };
     for (const auto& socket : item.sockets.value()) {
         const unsigned int group = socket.group;
-        while (group >= socket_groups.size()) {
-            socket_groups.push_back(SocketGroup());
+        while (group >= m_socket_groups.size()) {
+            m_socket_groups.push_back(SocketGroup());
         };
         const QString& colour = socket.sColour.value_or("");
-        if      (colour == "R") { ++red_sockets; ++socket_groups[group].red; }
-        else if (colour == "G") { ++green_sockets; ++socket_groups[group].green; }
-        else if (colour == "B") { ++blue_sockets; ++socket_groups[group].blue; }
-        else if (colour == "W") { ++white_sockets; ++socket_groups[group].white; }
+        if      (colour == "R") { ++m_red_sockets; ++m_socket_groups[group].red; }
+        else if (colour == "G") { ++m_green_sockets; ++m_socket_groups[group].green; }
+        else if (colour == "B") { ++m_blue_sockets; ++m_socket_groups[group].blue; }
+        else if (colour == "W") { ++m_white_sockets; ++m_socket_groups[group].white; }
         else {
             QLOG_ERROR() << "Unhandled item socket:" << colour << "in" << item.name << item.typeLine;
         };
-        ++sockets;
+        ++m_sockets;
     };
 }
 
@@ -75,13 +75,13 @@ void ItemInfo::loadProperties(const poe_api::Item& item)
         switch (type) {
             case static_cast<int>(PropertyType::Level):
                 if (value.contains(" ")) {
-                    gem_level = value.left(value.indexOf(" ")).toInt(&ok);
+                    m_gem_level = value.left(value.indexOf(" ")).toInt(&ok);
                 } else {
-                    gem_level = value.toInt(&ok);
+                    m_gem_level = value.toInt(&ok);
                 };
                 break;
             case static_cast<int>(PropertyType::Quality):
-                quality = value.sliced(1, value.size()-2).toInt(&ok);
+                m_quality = value.sliced(1, value.size()-2).toInt(&ok);
                 break;
             case static_cast<int>(PropertyType::PhysicalDamage):
                 average_physical_damage = averageValue(value, &ok);
@@ -93,28 +93,28 @@ void ItemInfo::loadProperties(const poe_api::Item& item)
                 average_chaos_damage = averageValue(value, &ok);
                 break;
             case static_cast<int>(PropertyType::CriticalStrikeChance):
-                critical_chance = value.chopped(1).toFloat(&ok);
+                m_critical_chance = value.chopped(1).toFloat(&ok);
                 break;
             case static_cast<int>(PropertyType::AttacksPerSecond):
-                attacks_per_second = value.toFloat(&ok);
+                m_attacks_per_second = value.toFloat(&ok);
                 break;
             case static_cast<int>(PropertyType::ChanceToBlock):
-                block = value.chopped(1).toInt(&ok);
+                m_block = value.chopped(1).toInt(&ok);
                 break;
             case static_cast<int>(PropertyType::Armour):
-                armour = value.toInt(&ok);
+                m_armour = value.toInt(&ok);
                 break;
             case static_cast<int>(PropertyType::EvasionRating):
-                evasion = value.toInt(&ok);
+                m_evasion_rating = value.toInt(&ok);
                 break;
             case static_cast<int>(PropertyType::EnergyShield):
-                energy_shield = value.toInt(&ok);
+                m_energy_shield = value.toInt(&ok);
                 break;
             case static_cast<int>(PropertyType::Ward):
-                ward = value.toInt(&ok);
+                m_ward = value.toInt(&ok);
                 break;
             case static_cast<int>(PropertyType::StackSize):
-                stack_size = value.split("/")[0].toInt(&ok);
+                m_stack_size = value.split("/")[0].toInt(&ok);
                 break;
             case static_cast<int>(PropertyType::MapTier):
             case static_cast<int>(PropertyType::ItemQuantity):
@@ -138,9 +138,9 @@ void ItemInfo::loadProperties(const poe_api::Item& item)
             QLOG_ERROR() << "Error loading property" << name << "from" << value;
         };
     };
-    physical_dps = average_physical_damage * attacks_per_second;
-    elemental_dps = average_elemental_damage * attacks_per_second;
-    chaos_dps = average_chaos_damage * attacks_per_second;
+    m_physical_dps = average_physical_damage * m_attacks_per_second;
+    m_elemental_dps = average_elemental_damage * m_attacks_per_second;
+    m_chaos_dps = average_chaos_damage * m_attacks_per_second;
 }
 
 void ItemInfo::loadRequirements(const poe_api::Item& item)
@@ -155,16 +155,16 @@ void ItemInfo::loadRequirements(const poe_api::Item& item)
         const QString value = std::get<0>(requirement.values[0]);
         switch (type) {
             case static_cast<int>(RequirementType::Level):
-                required_level = value.toInt(&ok);
+                m_required_level = value.toInt(&ok);
                 break;
             case static_cast<int>(RequirementType::Strength):
-                required_strength = value.toInt(&ok);
+                m_required_strength = value.toInt(&ok);
                 break;
             case static_cast<int>(RequirementType::Dexterity):
-                required_dexterity = value.toInt(&ok);
+                m_required_dexterity = value.toInt(&ok);
                 break;
             case static_cast<int>(RequirementType::Intelligence):
-                required_intelligence = value.toInt(&ok);
+                m_required_intelligence = value.toInt(&ok);
                 break;
             //case static_cast<int>(RequirementType::Class):
             //    required_class = value;
@@ -179,9 +179,9 @@ void ItemInfo::loadRequirements(const poe_api::Item& item)
    };
 }
 
-float ItemInfo::averageValue(const QString& property, bool* ok)
+float ItemInfo::averageValue(const QString& ranged_value, bool* ok)
 {
-    const QStringList parts = property.split("-");
+    const QStringList parts = ranged_value.split("-");
     if (parts.size() == 2) {
         bool ok_a = false;
         bool ok_b = false;

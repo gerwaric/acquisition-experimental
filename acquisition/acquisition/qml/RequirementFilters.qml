@@ -16,16 +16,16 @@ ColumnLayout {
         visible: false
 
         Label { text: "Level" }
-        TextField {
+        IntField {
             id: minLevel
             placeholderText: "Min"
+            filter: Acquisition.searchFilters.minLevel
             Layout.preferredWidth: 40
-            onTextChanged: { Acquisition.setFilter("MIN_LEVEL", parseInt(text, 10)) }
         }
-        TextField {
+        IntField {
             id: maxLevel
             placeholderText: "Max"
-            inputMethodHints: Qt.ImhDigitsOnly
+            filter: Acquisition.searchFilters.maxLevel
             Layout.preferredWidth: 40
         }
 
