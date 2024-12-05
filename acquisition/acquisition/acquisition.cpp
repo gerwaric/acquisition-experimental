@@ -26,9 +26,9 @@ Acquisition::Acquisition(QObject* parent) : QObject(parent)
     const QString banner_text("- Starting " APP_NAME " version " APP_VERSION_STRING " -");
     const QString banner_line(banner_text.length(), '-');
 
-    QLOG_INFO() << banner_line;
-    QLOG_INFO() << banner_text;
-    QLOG_INFO() << banner_line;
+	QLOG_INFO().noquote() << banner_line;
+	QLOG_INFO().noquote() << banner_text;
+	QLOG_INFO().noquote() << banner_line;
 
     OAuthSettings oauth;
     oauth.authorization_url = "https://www.pathofexile.com/oauth/authorize";

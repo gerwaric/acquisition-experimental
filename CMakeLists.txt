@@ -25,26 +25,29 @@ qt_add_qml_module(acquisition
     URI MyAcquisition
     VERSION 1.0
     QML_FILES
-        acquisition/acquisition/qml/ActionListMenu.qml
-        acquisition/acquisition/qml/ArmourFilters.qml
-        acquisition/acquisition/qml/AutoComplete.qml
-        acquisition/acquisition/qml/FilterSectionHeader.qml
-        acquisition/acquisition/qml/IntField.qml
-        acquisition/acquisition/qml/HeistFilters.qml
         acquisition/acquisition/qml/Main.qml
+        #
+        acquisition/acquisition/qml/ActionListMenu.qml
+        #acquisition/acquisition/qml/AutoComplete.qml
+        #acquisition/acquisition/qml/IntField.qml
         acquisition/acquisition/qml/MainMenuBar.qml
-        acquisition/acquisition/qml/MapFilters.qml
-        acquisition/acquisition/qml/MiscellaneousFilters.qml
-        acquisition/acquisition/qml/RequirementFilters.qml
         acquisition/acquisition/qml/SearchFilterGroup.qml
-        acquisition/acquisition/qml/SanctumFilters.qml
-        acquisition/acquisition/qml/SocketFilters.qml
-        acquisition/acquisition/qml/TypeFilters.qml
-        acquisition/acquisition/qml/UltimatumFilters.qml
-        acquisition/acquisition/qml/WeaponFilters.qml
-        acquisition/acquisition/qml/MinField.qml
-        acquisition/acquisition/qml/AttributeFilters.qml
-        acquisition/acquisition/qml/ResistanceFilters.qml
+        #
+        acquisition/acquisition/qml/SearchFilters/ArmourFilters.qml
+        acquisition/acquisition/qml/SearchFilters/FilterSectionHeader.qml
+        acquisition/acquisition/qml/SearchFilters/HeistFilters.qml
+        acquisition/acquisition/qml/SearchFilters/MapFilters.qml
+        acquisition/acquisition/qml/SearchFilters/MiscellaneousFilters.qml
+        acquisition/acquisition/qml/SearchFilters/RequirementFilters.qml
+        acquisition/acquisition/qml/SearchFilters/SanctumFilters.qml
+        acquisition/acquisition/qml/SearchFilters/SocketFilters.qml
+        acquisition/acquisition/qml/SearchFilters/TypeFilters.qml
+        acquisition/acquisition/qml/SearchFilters/UltimatumFilters.qml
+        acquisition/acquisition/qml/SearchFilters/WeaponFilters.qml
+        #acquisition/acquisition/qml/MinField.qml
+        #
+        acquisition/acquisition/qml/SearchFilters/AttributeFilters.qml
+        acquisition/acquisition/qml/SearchFilters/ResistanceFilters.qml
         #acquisition/acquisition/qml/MaxField.qml
 )
 

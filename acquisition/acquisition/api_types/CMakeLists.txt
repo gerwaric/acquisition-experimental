@@ -1,5 +1,6 @@
 target_sources(acquisition PRIVATE
     "account.h"
+    "account_profile.h"
     "character.h"
     "crucible_node.h"
     "display_mode.h"

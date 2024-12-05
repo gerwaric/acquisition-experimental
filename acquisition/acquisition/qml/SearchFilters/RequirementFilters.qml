@@ -3,7 +3,14 @@ import QtQuick.Controls.Fusion
 import QtQuick.Layouts
 
 ColumnLayout {
-    Layout.fillWidth: true
+	Layout.margins: 0
+	Layout.fillWidth: true
+	Label { text: "hello" }
+}
+
+/*
+ColumnLayout {
+	Layout.fillWidth: true
     FilterSectionHeader {
         title: "Requirements"
         filters: requirementFilters
@@ -49,3 +56,4 @@ ColumnLayout {
         }
     }
 }
+*/

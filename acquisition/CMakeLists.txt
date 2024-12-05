@@ -1,4 +1,4 @@
-target_include_directories(acquisition PRIVATE
+ target_include_directories(acquisition PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
@@ -15,7 +15,7 @@ add_subdirectory("acquisition/api_types")
 add_subdirectory("acquisition/data_model")
 add_subdirectory("acquisition/data_stores")
 add_subdirectory("acquisition/oauth")
-#add_subdirectory("acquisition/qml")
+#add_subdirectory("acquisition/qml") # This currently lives in the top-level CMakeLists.txt
 add_subdirectory("acquisition/rate_limit")
 add_subdirectory("acquisition/search_filters")
 add_subdirectory("acquisition/utils")

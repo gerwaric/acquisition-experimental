@@ -75,6 +75,8 @@ public slots:
     void refreshEverything_characterListReceived(QNetworkReply* reply);
     void refreshEverything_stashListReceived(QNetworkReply* reply);
 
+	void getLeagues();
+
 private:
     void loadSettings();
     void initLeagueActions();
@@ -83,7 +85,6 @@ private:
     void updateCharacter(std::unique_ptr<poe_api::Character>& character);
     void updateStash(std::unique_ptr<poe_api::StashTab>& stash);
 
-    void getLeagues();
     void listCharacters();
     void getCharacter(
         const QString& name);

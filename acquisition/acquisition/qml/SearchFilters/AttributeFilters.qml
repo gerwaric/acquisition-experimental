@@ -5,23 +5,23 @@ import QtQuick.Layouts
 ColumnLayout {
     Layout.fillWidth: true
     FilterSectionHeader {
-        title: "Resistances"
-        filters: resistanceFilters
+        title: "Attributes"
+        filters: attributeFilters
     }
     GridLayout {
-        id: resistanceFilters
+        id: attributeFilters
         Layout.fillWidth: true
         Layout.margins: 5
         columns: 3
         visible: false
 
         Label {
-            text: "+#% to Total"
+			text: "+# to Total:"
             Layout.margins: 5
             Layout.columnSpan: 3
         }
 
-        Label { text: "Fire" }
+        Label { text: "Strength" }
         TextField {
             placeholderText: "Min"
             Layout.preferredWidth: 40
@@ -31,7 +31,7 @@ ColumnLayout {
             Layout.preferredWidth: 40
         }
 
-        Label { text: "Cold" }
+        Label { text: "Dexterity" }
         TextField {
             placeholderText: "Min"
             Layout.preferredWidth: 40
@@ -41,17 +41,7 @@ ColumnLayout {
             Layout.preferredWidth: 40
         }
 
-        Label { text: "Lightning" }
-        TextField {
-            placeholderText: "Min"
-            Layout.preferredWidth: 40
-        }
-        TextField {
-            placeholderText: "Max"
-            Layout.preferredWidth: 40
-        }
-
-        Label { text: "Chaos" }
+        Label { text: "Intelligence" }
         TextField {
             placeholderText: "Min"
             Layout.preferredWidth: 40
@@ -62,12 +52,12 @@ ColumnLayout {
         }
 
         Label {
-            text: "+#% to Maximum"
+			text: "#% Increased:"
             Layout.margins: 5
             Layout.columnSpan: 3
         }
 
-        Label { text: "Fire" }
+        Label { text: "Strength" }
         TextField {
             placeholderText: "Min"
             Layout.preferredWidth: 40
@@ -77,7 +67,7 @@ ColumnLayout {
             Layout.preferredWidth: 40
         }
 
-        Label { text: "Cold" }
+        Label { text: "Dexterity" }
         TextField {
             placeholderText: "Min"
             Layout.preferredWidth: 40
@@ -87,7 +77,7 @@ ColumnLayout {
             Layout.preferredWidth: 40
         }
 
-        Label { text: "Lightning" }
+        Label { text: "Intelligence" }
         TextField {
             placeholderText: "Min"
             Layout.preferredWidth: 40
@@ -96,18 +86,6 @@ ColumnLayout {
             placeholderText: "Max"
             Layout.preferredWidth: 40
         }
-
-        Label { text: "Chaos" }
-        TextField {
-            placeholderText: "Min"
-            Layout.preferredWidth: 40
-        }
-        TextField {
-            placeholderText: "Max"
-            Layout.preferredWidth: 40
-        }
-
-
     }
 }
 

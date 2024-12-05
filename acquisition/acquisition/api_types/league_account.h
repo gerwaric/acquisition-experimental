@@ -17,7 +17,7 @@ namespace poe_api{
         };
 
         std::vector<poe_api::LeagueAccount::AtlasPassiveTree> atlas_passive_trees; // array of object
-        JS_OBJ(atlas_passive_trees)
+        JS_OBJ(atlas_passive_trees);
 
     };
 

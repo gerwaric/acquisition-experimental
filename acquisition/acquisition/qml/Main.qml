@@ -3,6 +3,8 @@ import QtQuick.Controls.Fusion
 import QtQuick.Dialogs
 import QtQuick.Layouts
 
+import "SearchFilters" as SearchFilters
+
 ApplicationWindow {
     width: 800
     height: 600
@@ -42,24 +44,24 @@ ApplicationWindow {
                     Layout.fillWidth: true
                 }
 
-                TypeFilters {}
-                WeaponFilters {}
-                ArmourFilters {}
-                SocketFilters {}
-                RequirementFilters {}
-                MapFilters {}
-                HeistFilters {}
-                SanctumFilters {}
-                UltimatumFilters {}
-                MiscellaneousFilters {}
+				SearchFilters.TypeFilters {}
+				SearchFilters.WeaponFilters {}
+				SearchFilters.ArmourFilters {}
+				SearchFilters.SocketFilters {}
+				SearchFilters.RequirementFilters {}
+				SearchFilters.MapFilters {}
+				SearchFilters.HeistFilters {}
+				SearchFilters.SanctumFilters {}
+				SearchFilters.UltimatumFilters {}
+				SearchFilters.MiscellaneousFilters {}
 
                 Label {
                     text: "Common Stats"
                     Layout.fillWidth: true
                 }
 
-                AttributeFilters {}
-                ResistanceFilters {}
+				SearchFilters.AttributeFilters {}
+				SearchFilters.ResistanceFilters {}
 
                 Rectangle { Layout.fillHeight: true }
             }

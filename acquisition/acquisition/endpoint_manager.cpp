@@ -42,52 +42,55 @@ EndpointManager::EndpointManager(
     : QObject(parent)
     , m_rate_limiter(rate_limiter) {}
 
-void EndpointManager::getLeagues()
+void EndpointManager::getLeagues(const QString& realm)
 {
-    QLOG_TRACE() << "EndpointManager::getLeagues()";
-    const QUrl url("https://api.pathofexile.com/account/leagues");
+    QLOG_TRACE() << "EndpointManager::getLeagues() in realm" << realm;
+    const QUrl url("https://api.pathofexile.com/account/leagues/" + realm);
     const QNetworkRequest request(url);
     auto* reply = m_rate_limiter.Submit("GET_LEAGUES", request);
     connect(reply, &RateLimitedReply::finished, this, &EndpointManager::receiveLeagueList);
 }
 
-void EndpointManager::listCharacters()
+void EndpointManager::listCharacters(const QString& realm)
 {
-    QLOG_TRACE() << "EndpointManager::listCharacters()";
-    const QUrl url("https://api.pathofexile.com/character");
+    QLOG_TRACE() << "EndpointManager::listCharacters() in realm" << realm;
+    const QUrl url("https://api.pathofexile.com/character/" + realm);
     const QNetworkRequest request(url);
     auto* reply = m_rate_limiter.Submit("LIST_CHARACTERS", request);
     connect(reply, &RateLimitedReply::finished, this, &EndpointManager::receiveCharacterList);
 }
 
 void EndpointManager::getCharacter(
+    const QString& realm,
     const QString& name)
 {
-    QLOG_TRACE() << "EndpointManager::getCharacter()" << name;
-    const QUrl url("https://api.pathofexile.com/character/" + name);
+    QLOG_TRACE() << "EndpointManager::getCharacter() in realm" << realm << "with name" << name;
+    const QUrl url("https://api.pathofexile.com/character/" + realm + "/" + name);
     const QNetworkRequest request(url);
     auto* reply = m_rate_limiter.Submit("GET_CHARACTER", request);
     connect(reply, &RateLimitedReply::finished, this, &EndpointManager::receiveCharacter);
 }
 
 void EndpointManager::listStashes(
+    const QString& realm,
     const QString& league)
 {
-    QLOG_TRACE() << "EndpointManager::listStashes()" << league;
-    const QUrl url("https://api.pathofexile.com/stash/" + league);
+    QLOG_TRACE() << "EndpointManager::listStashes() in realm" << realm << "for league" << league;
+    const QUrl url("https://api.pathofexile.com/stash/" + realm + "/" + league);
     const QNetworkRequest request(url);
     auto* reply = m_rate_limiter.Submit("LIST_STASHES", request);
     connect(reply, &RateLimitedReply::finished, this, &EndpointManager::receiveStashList);
 }
 
 void EndpointManager::getStash(
+    const QString& realm,
     const QString& league,
     const QString& stash_id,
     const QString& substash_id)
 {
-    QLOG_TRACE() << "EndpointManager::getStashes()" << league << stash_id << substash_id;
-    const QString stash_location = stash_id + ((substash_id.isEmpty()) ? "" : "/" + substash_id);
-    const QUrl url("https://api.pathofexile.com/stash/" + league + "/" + stash_location);
+    QLOG_TRACE() << "EndpointManager::getStashes() in realm" << realm << "for league" << league << ":" << stash_id << substash_id;
+    const QString stash_location = substash_id.isEmpty() ? stash_id : stash_id + "/" + substash_id;
+    const QUrl url("https://api.pathofexile.com/stash/" + realm + "/" + league + "/" + stash_location);
     const QNetworkRequest request(url);
     auto* reply = m_rate_limiter.Submit("GET_STASH", request);
     connect(reply, &RateLimitedReply::finished, this, &EndpointManager::receiveStash);
