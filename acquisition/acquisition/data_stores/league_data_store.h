@@ -1,7 +1,7 @@
 #pragma once
 
-#include <acquisition/api_types/character.h>
-#include <acquisition/api_types/stash_tab.h>
+#include <libacq/poe_api/character.h>
+#include <libacq/poe_api/stash_tab.h>
 
 #include <QObject>
 

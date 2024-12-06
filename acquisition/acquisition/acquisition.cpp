@@ -1,9 +1,9 @@
 #include <acquisition/acquisition.h>
 
-#include <acquisition/api_types/character.h>
-#include <acquisition/api_types/item.h>
-#include <acquisition/api_types/league.h>
-#include <acquisition/api_types/stash_tab.h>
+#include <libacq/poe_api/character.h>
+#include <libacq/poe_api/item.h>
+#include <libacq/poe_api/league.h>
+#include <libacq/poe_api/stash_tab.h>
 #include <acquisition/constants.h>
 #include <acquisition/data_stores/league_data_store.h>
 #include <acquisition/data_stores/user_data_store.h>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <acquisition/api_types/character.h>
+#include <libacq/poe_api/character.h>
 #include <acquisition/data_model/tree_node.h>
 
 class CharacterNode : public TreeNode

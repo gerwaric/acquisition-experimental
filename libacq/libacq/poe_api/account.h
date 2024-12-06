@@ -1,8 +1,8 @@
 #pragma once
 
-#include <acquisition/utils/json_struct_qt.h>
+#include <libacq/json/json_struct_qt.h>
 
-#include <acquisition/api_types/guild.h>
+#include <libacq/poe_api/guild.h>
 
 #include <optional>
 

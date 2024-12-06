@@ -56,6 +56,7 @@ set_target_properties(acquisition PROPERTIES
 )
 
 add_subdirectory(acquisition)
+add_subdirectory(libacq)
 add_subdirectory(external/boost-headers-only)
 add_subdirectory(external/json_struct)
 add_subdirectory(external/QsLog)
@@ -67,8 +68,8 @@ target_link_libraries(acquisition PRIVATE
     Qt6::Quick
     Qt6::Sql
     boost-headers-only
-    json_struct
     QsLog
+    libacq
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

@@ -2,7 +2,7 @@
 
 #include <acquisition/proxy_model.h>
 
-#include <acquisition/api_types/item.h>
+#include <libacq/poe_api/item.h>
 #include <acquisition/search_filters.h>
 
 #include <QObject>

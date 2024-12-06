@@ -1,7 +1,7 @@
 #pragma once
 
-#include <acquisition/api_types/passive_group.h>
-#include <acquisition/api_types/passive_node.h>
+#include <libacq/poe_api/passive_group.h>
+#include <libacq/poe_api/passive_node.h>
 
 #include <optional>
 #include <unordered_map>

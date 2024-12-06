@@ -1,8 +1,8 @@
 #pragma once
 
-#include <acquisition/utils/json_struct_qt.h>
+#include <libacq/json/json_struct_qt.h>
 
-#include <acquisition/api_types/pvp_ladder_team_member.h>
+#include <libacq/poe_api/pvp_ladder_team_member.h>
 
 #include <optional>
 #include <vector>

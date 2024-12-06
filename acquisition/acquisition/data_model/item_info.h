@@ -1,7 +1,7 @@
 #pragma once
 
-#include <acquisition/api_types/frame_type.h>
-#include <acquisition/api_types/item.h>
+#include <libacq/poe_api/frame_type.h>
+#include <libacq/poe_api/item.h>
 
 #include <QString>
 

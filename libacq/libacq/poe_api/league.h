@@ -1,8 +1,8 @@
 #pragma once
 
-#include <acquisition/utils/json_struct_qt.h>
+#include <libacq/json/json_struct_qt.h>
 
-#include <acquisition/api_types/league_rule.h>
+#include <libacq/poe_api/league_rule.h>
 
 #include <optional>
 #include <vector>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <acquisition/api_types/item.h>
+#include <libacq/poe_api/item.h>
 #include <acquisition/data_model/item_info.h>
 #include <acquisition/data_model/tree_node.h>
 

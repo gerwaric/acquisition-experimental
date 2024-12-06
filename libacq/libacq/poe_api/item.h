@@ -1,11 +1,11 @@
 #pragma once
 
-#include <acquisition/utils/json_struct_qt.h>
+#include <libacq/json/json_struct_qt.h>
 
-#include <acquisition/api_types/crucible_node.h>
-#include <acquisition/api_types/frame_type.h>
-#include <acquisition/api_types/item_property.h>
-#include <acquisition/api_types/item_socket.h>
+#include <libacq/poe_api/crucible_node.h>
+#include <libacq/poe_api/frame_type.h>
+#include <libacq/poe_api/item_property.h>
+#include <libacq/poe_api/item_socket.h>
 
 #include <optional>
 #include <unordered_map>

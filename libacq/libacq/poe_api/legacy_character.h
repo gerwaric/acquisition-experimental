@@ -1,8 +1,8 @@
 #pragma once
 
-#include <acquisition/utils/json_struct_qt.h>
+#include <libacq/json/json_struct_qt.h>
 
-#include <acquisition/api_types/item.h>
+#include <libacq/poe_api/item.h>
 
 #include <unordered_map>
 #include <vector>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <acquisition/api_types/stash_tab.h>
+#include <libacq/poe_api/stash_tab.h>
 #include <acquisition/data_model/tree_node.h>
 
 class StashNode : public TreeNode

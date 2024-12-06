@@ -1,10 +1,10 @@
 #pragma once
 
-#include <acquisition/utils/json_struct_qt.h>
+#include <libacq/json/json_struct_qt.h>
 
-#include <acquisition/api_types/item.h>
-#include <acquisition/api_types/item_jewel_data.h>
-#include <acquisition/api_types/passive_node.h>
+#include <libacq/poe_api/item.h>
+#include <libacq/poe_api/item_jewel_data.h>
+#include <libacq/poe_api/passive_node.h>
 
 #include <optional>
 #include <unordered_map>

@@ -19,7 +19,7 @@
 #include <acquisition/oauth/oauth_manager.h>
 
 #include <acquisition/constants.h>
-#include <acquisition/utils/json_struct_qt.h>
+#include <libacq/json/json_struct_qt.h>
 
 #include <QsLog/QsLog.h>
 

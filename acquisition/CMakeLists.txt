@@ -11,7 +11,7 @@ target_include_directories(acquisition PRIVATE
 )
 
 add_subdirectory("acquisition")
-add_subdirectory("acquisition/api_types")
+#add_subdirectory("acquisition/api_types")
 add_subdirectory("acquisition/data_model")
 add_subdirectory("acquisition/data_stores")
 add_subdirectory("acquisition/oauth")

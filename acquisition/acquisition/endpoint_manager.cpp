@@ -1,7 +1,7 @@
 #include <acquisition/endpoint_manager.h>
 
 #include <acquisition/rate_limit/rate_limiter.h>
-#include <acquisition/utils/json_struct_qt.h>
+#include <libacq/json/json_struct_qt.h>
 
 #include <QsLog/QsLog.h>
 
