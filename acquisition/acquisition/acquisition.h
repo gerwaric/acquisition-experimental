@@ -3,8 +3,8 @@
 #include <libacq/poe_api/character.h>
 #include <libacq/poe_api/league.h>
 #include <libacq/poe_api/stash_tab.h>
-#include <acquisition/data_model/tree_model.h>
-#include <acquisition/oauth/oauth_token.h>
+#include <libacq/data_model/tree_model.h>
+#include <libacq/oauth/oauth_token.h>
 #include <acquisition/proxy_model.h>
 #include <acquisition/settings.h>
 #include <acquisition/search_filters.h>

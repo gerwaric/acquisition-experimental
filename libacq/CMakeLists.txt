@@ -60,8 +60,6 @@ add_library(libacq STATIC
     "libacq/rate_limit/rate_limit_manager.h"
     "libacq/rate_limit/rate_limit_policy.cpp"
     "libacq/rate_limit/rate_limit_policy.h"
-    "libacq/rate_limit/rate_limit_status_dialog.cpp"
-    "libacq/rate_limit/rate_limit_status_dialog.h"
     "libacq/utils/command_line.cpp"
     "libacq/utils/command_line.h"
     "libacq/utils/fatal_error.cpp"

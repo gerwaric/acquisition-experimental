@@ -1,7 +1,7 @@
 #pragma once
 
-#include <acquisition/data_model/item_info.h>
-#include <acquisition/data_model/tree_model.h>
+#include <libacq/data_model/item_info.h>
+#include <libacq/data_model/tree_model.h>
 #include <acquisition/search_filters.h>
 
 #include <QSortFilterProxyModel>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <acquisition/data_model/item_info.h>
+#include <libacq/data_model/item_info.h>
 
 #include <QObject>
 #include <QQmlEngine>

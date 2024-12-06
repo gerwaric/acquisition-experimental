@@ -1,6 +1,6 @@
 #include <acquisition/settings.h>
 
-#include <acquisition/utils/utils.h>
+#include <libacq/utils/utils.h>
 
 #include <QsLog/QsLog.h>
 

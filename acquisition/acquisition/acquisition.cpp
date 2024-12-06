@@ -4,15 +4,15 @@
 #include <libacq/poe_api/item.h>
 #include <libacq/poe_api/league.h>
 #include <libacq/poe_api/stash_tab.h>
-#include <acquisition/constants.h>
-#include <acquisition/data_stores/league_data_store.h>
-#include <acquisition/data_stores/user_data_store.h>
-#include <acquisition/oauth/oauth_manager.h>
-#include <acquisition/oauth/oauth_settings.h>
-#include <acquisition/rate_limit/rate_limiter.h>
+#include <libacq/constants.h>
+#include <libacq/data_stores/league_data_store.h>
+#include <libacq/data_stores/user_data_store.h>
+#include <libacq/oauth/oauth_manager.h>
+#include <libacq/oauth/oauth_settings.h>
+#include <libacq/rate_limit/rate_limiter.h>
 #include <acquisition/settings.h>
-#include <acquisition/utils/command_line.h>
-#include <acquisition/utils/utils.h>
+#include <libacq/utils/command_line.h>
+#include <libacq/utils/utils.h>
 
 #include <QsLog/QsLog.h>
 

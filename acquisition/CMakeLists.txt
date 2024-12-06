@@ -10,12 +10,20 @@ target_include_directories(acquisition PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/acquisition
 )
 
-add_subdirectory("acquisition")
-#add_subdirectory("acquisition/api_types")
-#add_subdirectory("acquisition/data_model")
-#add_subdirectory("acquisition/data_stores")
-#add_subdirectory("acquisition/oauth")
-#add_subdirectory("acquisition/qml") # This currently lives in the top-level CMakeLists.txt
-#add_subdirectory("acquisition/rate_limit")
+target_sources(acquisition PRIVATE
+    "acquisition/acquisition.cpp"
+    "acquisition/acquisition.h"
+    "acquisition/float_filter.cpp"
+    "acquisition/float_filter.h"
+    "acquisition/main.cpp"
+    "acquisition/proxy_model.cpp"
+    "acquisition/proxy_model.h"
+    "acquisition/search.cpp"
+    "acquisition/search.h"
+    "acquisition/search_filters.cpp"
+    "acquisition/search_filters.h"
+    "acquisition/settings.cpp"
+    "acquisition/settings.h"
+)
+
 add_subdirectory("acquisition/search_filters")
-#add_subdirectory("acquisition/utils")
