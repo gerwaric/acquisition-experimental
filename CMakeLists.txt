@@ -62,12 +62,7 @@ add_subdirectory(external/json_struct)
 add_subdirectory(external/QsLog)
 
 target_link_libraries(acquisition PRIVATE
-    Qt6::HttpServer
-    Qt6::Network
-    Qt6::NetworkAuth
     Qt6::Quick
-    #Qt6::Sql
-    boost-headers-only
     QsLog
     libacq
 )

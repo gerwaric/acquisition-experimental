@@ -70,6 +70,7 @@ add_library(libacq STATIC
 
 target_link_libraries(libacq PUBLIC
     Qt6::Core
+    Qt6::HttpServer
     Qt6::Network
     Qt6::Quick
     Qt6::Sql
