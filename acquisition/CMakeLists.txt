@@ -11,12 +11,8 @@ qt_add_executable(acquisition WIN32 MACOSX_BUNDLE
     "src/main.cpp"
     "src/proxy_model.cpp"
     "src/proxy_model.h"
-    "src/search.cpp"
-    "src/search.h"
     "src/search_filters.cpp"
     "src/search_filters.h"
-    "src/settings.cpp"
-    "src/settings.h"
 )
 
 # The src directory needs to be on the path because c++

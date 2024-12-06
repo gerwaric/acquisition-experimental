@@ -1,8 +1,9 @@
 #pragma once
 
+#include "search_filters.h"
+
 #include <libacq/data_model/item_info.h>
 #include <libacq/data_model/tree_model.h>
-#include <acquisition/search_filters.h>
 
 #include <QSortFilterProxyModel>
 

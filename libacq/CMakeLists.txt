@@ -64,6 +64,8 @@ add_library(libacq STATIC
     "libacq/utils/command_line.h"
     "libacq/utils/fatal_error.cpp"
     "libacq/utils/fatal_error.h"
+    "libacq/utils/settings.cpp"
+    "libacq/utils/settings.h"
     "libacq/utils/utils.cpp"
     "libacq/utils/utils.h"
 )
