@@ -1,4 +1,4 @@
-#include <acquisition/settings.h>
+#include "settings.h"
 
 #include <libacq/utils/utils.h>
 

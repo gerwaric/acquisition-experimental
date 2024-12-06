@@ -1,4 +1,4 @@
-#include <acquisition/float_filter.h>
+#include "float_filter.h"
 
 FloatFilter::FloatFilter(SearchFilters::Filter id, ProxyModel& model, Getter<float> getter, QObject* parent)
     : QObject(parent)

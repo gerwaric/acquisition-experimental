@@ -1,4 +1,4 @@
-#include <acquisition/acquisition.h>
+#include "acquisition.h"
 
 #include <libacq/poe_api/character.h>
 #include <libacq/poe_api/item.h>

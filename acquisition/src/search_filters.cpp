@@ -1,4 +1,4 @@
-#include <acquisition/search_filters.h>
+#include "search_filters.h"
 
 #include <acquisition/float_filter.h>
 #include <acquisition/proxy_model.h>

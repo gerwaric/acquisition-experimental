@@ -1,13 +1,14 @@
 #pragma once
 
+#include "proxy_model.h"
+#include "settings.h"
+#include "search_filters.h"
+
 #include <libacq/poe_api/character.h>
 #include <libacq/poe_api/league.h>
 #include <libacq/poe_api/stash_tab.h>
 #include <libacq/data_model/tree_model.h>
 #include <libacq/oauth/oauth_token.h>
-#include <acquisition/proxy_model.h>
-#include <acquisition/settings.h>
-#include <acquisition/search_filters.h>
 
 #include <QObject>
 #include <QQmlEngine>

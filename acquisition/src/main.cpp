@@ -17,7 +17,8 @@
     along with this program.If not, see < https://www.gnu.org/licenses/>.
 */
 
-#include <acquisition/acquisition.h>
+#include "acquisition.h"
+
 #include <libacq/utils/command_line.h>
 //#include <acquisition/widgets/main_window.h>
 

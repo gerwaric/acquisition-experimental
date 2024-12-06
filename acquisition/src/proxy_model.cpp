@@ -1,4 +1,4 @@
-#include <acquisition/proxy_model.h>
+#include "proxy_model.h"
 
 #include <libacq/data_model/item_node.h>
 #include <libacq/data_model/tree_node.h>
