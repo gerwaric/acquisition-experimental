@@ -66,7 +66,7 @@ target_link_libraries(acquisition PRIVATE
     Qt6::Network
     Qt6::NetworkAuth
     Qt6::Quick
-    Qt6::Sql
+    #Qt6::Sql
     boost-headers-only
     QsLog
     libacq

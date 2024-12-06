@@ -1,6 +1,6 @@
 #pragma once
 
-#include <acquisition/utils/utils.h>
+#include <libacq/utils/utils.h>
 
 #include <json_struct/json_struct.h>
 

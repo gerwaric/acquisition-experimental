@@ -1,5 +1,29 @@
 add_library(libacq STATIC
+    "libacq/constants.h"
+    "libacq/data_model/character_node.cpp"
+    "libacq/data_model/character_node.h"
+    "libacq/data_model/item_info.cpp"
+    "libacq/data_model/item_info.h"
+    "libacq/data_model/item_node.cpp"
+    "libacq/data_model/item_node.h"
+    "libacq/data_model/root_node.cpp"
+    "libacq/data_model/root_node.h"
+    "libacq/data_model/stash_node.cpp"
+    "libacq/data_model/stash_node.h"
+    "libacq/data_model/tree_model.cpp"
+    "libacq/data_model/tree_model.h"
+    "libacq/data_model/tree_node.cpp"
+    "libacq/data_model/tree_node.h"
+    "libacq/data_stores/league_data_store.cpp"
+    "libacq/data_stores/league_data_store.h"
+    "libacq/data_stores/user_data_store.h"
+    "libacq/data_stores/user_data_store.cpp"
     "libacq/json/json_struct_qt.h"
+    "libacq/oauth/oauth_manager.cpp"
+    "libacq/oauth/oauth_manager.h"
+    "libacq/oauth/oauth_settings.h"
+    "libacq/oauth/oauth_token.cpp"
+    "libacq/oauth/oauth_token.h"
     "libacq/poe_api/account.h"
     "libacq/poe_api/account_profile.h"
     "libacq/poe_api/character.h"
@@ -26,10 +50,33 @@ add_library(libacq STATIC
     "libacq/poe_api/pvp_ladder_team_member.h"
     "libacq/poe_api/pvp_match.h"
     "libacq/poe_api/stash_tab.h"
+    "libacq/rate_limit/rate_limited_reply.cpp"
+    "libacq/rate_limit/rate_limited_reply.h"
+    "libacq/rate_limit/rate_limited_request.cpp"
+    "libacq/rate_limit/rate_limited_request.h"
+    "libacq/rate_limit/rate_limiter.cpp"
+    "libacq/rate_limit/rate_limiter.h"
+    "libacq/rate_limit/rate_limit_manager.cpp"
+    "libacq/rate_limit/rate_limit_manager.h"
+    "libacq/rate_limit/rate_limit_policy.cpp"
+    "libacq/rate_limit/rate_limit_policy.h"
+    "libacq/rate_limit/rate_limit_status_dialog.cpp"
+    "libacq/rate_limit/rate_limit_status_dialog.h"
+    "libacq/utils/command_line.cpp"
+    "libacq/utils/command_line.h"
+    "libacq/utils/fatal_error.cpp"
+    "libacq/utils/fatal_error.h"
+    "libacq/utils/utils.cpp"
+    "libacq/utils/utils.h"
 )
 
 target_link_libraries(libacq PUBLIC
     Qt6::Core
+    Qt6::Network
+    Qt6::Quick
+    Qt6::Sql
+    boost-headers-only
+    QsLog
     json_struct
 )
 
