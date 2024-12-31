@@ -1,18 +1,18 @@
 #include "acquisition.h"
 
-#include <libacq/poe_api/character.h>
-#include <libacq/poe_api/item.h>
-#include <libacq/poe_api/league.h>
-#include <libacq/poe_api/stash_tab.h>
+#include <libacq/poe/character.h>
+#include <libacq/poe/item.h>
+#include <libacq/poe/league.h>
+#include <libacq/poe/stashtab.h>
 #include <libacq/constants.h>
-#include <libacq/data_stores/league_data_store.h>
-#include <libacq/data_stores/user_data_store.h>
-#include <libacq/oauth/oauth_manager.h>
-#include <libacq/oauth/oauth_settings.h>
-#include <libacq/rate_limit/rate_limiter.h>
-#include <acquisition/settings.h>
-#include <libacq/utils/command_line.h>
-#include <libacq/utils/utils.h>
+#include <libacq/oauth/oauthmanager.h>
+#include <libacq/oauth/oauthsettings.h>
+#include <libacq/ratelimit/ratelimiter.h>
+#include <libacq/storage/leaguestore.h>
+#include <libacq/storage/userstore.h>
+#include <libacq/util/commandline.h>
+#include <libacq/util/settings.h>
+#include <libacq/util/utils.h>
 
 #include <QsLog/QsLog.h>
 
@@ -54,8 +54,8 @@ void Acquisition::setDataDirectory(const QString& directory)
 {
     QLOG_DEBUG() << "Acquisition: loading settings and data from" << directory;
     m_settings = new Settings(directory, this);
-    m_user_data = new UserDataStore(directory, this);
-    m_league_data = new LeagueDataStore(directory, this);
+    m_user_data = new UserStore(directory, this);
+    m_league_data = new LeagueStore(directory, this);
 
     loadSettings();
     initLeagueActions();

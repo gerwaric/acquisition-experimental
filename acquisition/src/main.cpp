@@ -19,7 +19,7 @@
 
 #include "acquisition.h"
 
-#include <libacq/utils/command_line.h>
+#include <libacq/util/commandline.h>
 //#include <acquisition/widgets/main_window.h>
 
 #include <QsLog/QsLog.h>

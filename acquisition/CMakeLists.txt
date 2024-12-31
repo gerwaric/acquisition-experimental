@@ -6,13 +6,13 @@
 qt_add_executable(acquisition WIN32 MACOSX_BUNDLE
     "src/acquisition.cpp"
     "src/acquisition.h"
-    "src/float_filter.cpp"
-    "src/float_filter.h"
+    "src/floatfilter.cpp"
+    "src/floatfilter.h"
     "src/main.cpp"
-    "src/proxy_model.cpp"
-    "src/proxy_model.h"
-    "src/search_filters.cpp"
-    "src/search_filters.h"
+    "src/proxymodel.cpp"
+    "src/proxymodel.h"
+    "src/searchfilters.cpp"
+    "src/searchfilters.h"
 )
 
 # The src directory needs to be on the path because c++

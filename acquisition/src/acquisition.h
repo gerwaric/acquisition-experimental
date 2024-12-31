@@ -1,14 +1,14 @@
 #pragma once
 
-#include "proxy_model.h"
-#include "settings.h"
-#include "search_filters.h"
+#include "proxymodel.h"
+#include "searchfilters.h"
 
-#include <libacq/poe_api/character.h>
-#include <libacq/poe_api/league.h>
-#include <libacq/poe_api/stash_tab.h>
-#include <libacq/data_model/tree_model.h>
-#include <libacq/oauth/oauth_token.h>
+#include <libacq/poe/character.h>
+#include <libacq/poe/league.h>
+#include <libacq/poe/stashtab.h>
+#include <libacq/model/treemodel.h>
+#include <libacq/oauth/oauthtoken.h>
+#include <libacq/util/settings.h>
 
 #include <QObject>
 #include <QQmlEngine>
@@ -22,11 +22,11 @@
 
 class QNetworkAccessManager;
 
-class LeagueDataStore;
+class LeagueStore;
 class OAuthManager;
 class RateLimiter;
 class Settings;
-class UserDataStore;
+class UserStore;
 
 class Acquisition : public QObject
 {
@@ -112,8 +112,8 @@ private:
 
     QString m_data_directory;
     Settings* m_settings{ nullptr };
-    UserDataStore* m_user_data{ nullptr };
-    LeagueDataStore* m_league_data{ nullptr };
+    UserStore* m_user_data{ nullptr };
+    LeagueStore* m_league_data{ nullptr };
 
     QList<QAction*> m_league_actions;
     QList<QAction*> m_refresh_actions;
