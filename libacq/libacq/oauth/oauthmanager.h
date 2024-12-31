@@ -78,4 +78,7 @@ private:
 
     std::unique_ptr<const OAuthToken> m_token;
 
+    static const QString SUCCESS_HTML;
+    static const QString ERROR_HTML;
+
 };

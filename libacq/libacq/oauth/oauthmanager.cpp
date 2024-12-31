@@ -245,32 +245,6 @@ QString OAuthManager::receiveAuthorization(const QHttpServerRequest& request, co
     const QString auth_code = query.queryItemValue("code");
     const QString auth_state = query.queryItemValue("state");
 
-    const QString SUCCESS_HTML = QString(R"html(
-		<html>
-			<head>
-				<link rel="icon" href="data:, ">
-				<title>Acquisition</title>
-				<style>
-					html, body, .container { height: 75%; }
-					.container { display: flex; align-items: center; justify-content: center; }
-				</style>
-			</head>
-			<body>
-				<h1 class="container">Acquisition has been authorized.<br>You may close this page.</h1>
-			</body>
-		</html>")html").simplified();
-
-    const QString ERROR_HTML = QString(R"html(
-        <html>
-		    <head>
-			    <link rel="icon" href="data:, ">
-			    <title>OAuth Authorization Error</title>
-		    </head>
-		    <body>
-			    <p>%2</p>
-		    </body>
-	    </html>)html").simplified();
-
     // Make sure the code and state look valid.
     QString error_message;
     if (auth_code.isEmpty()) {
@@ -444,3 +418,29 @@ void OAuthManager::showStatus()
     msgBox->raise();
     */
 }
+
+const QString OAuthManager::SUCCESS_HTML = QString(R"html(
+		<html>
+			<head>
+				<link rel="icon" href="data:, ">
+				<title>Acquisition</title>
+				<style>
+					html, body, .container { height: 75%; }
+					.container { display: flex; align-items: center; justify-content: center; }
+				</style>
+			</head>
+			<body>
+				<h1 class="container">Acquisition has been authorized.<br>You may close this page.</h1>
+			</body>
+		</html>")html").simplified();
+
+const QString OAuthManager::ERROR_HTML = QString(R"html(
+        <html>
+		    <head>
+			    <link rel="icon" href="data:, ">
+			    <title>OAuth Authorization Error</title>
+		    </head>
+		    <body>
+			    <p>%2</p>
+		    </body>
+	    </html>)html").simplified();
